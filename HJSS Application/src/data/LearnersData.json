@@ -1,0 +1,41 @@
+[
+  {
+    "learnerID": "SWL1",
+    "learnerName": "LearnerA",
+    "learnerGender": "male",
+    "learnerAge": 11,
+    "learnerEmergencyContact": "7123456789",
+    "learnerCurrentGrade": 0,
+    "learnerLessons": {
+      "booked": 0,
+      "attended": 0,
+      "cancelled": 0
+    }
+  },
+  {
+    "learnerID": "SWL2",
+    "learnerName": "LearnerB",
+    "learnerGender": "female",
+    "learnerAge": 11,
+    "learnerEmergencyContact": "7123456789",
+    "learnerCurrentGrade": 0,
+    "learnerLessons": {
+      "booked": 0,
+      "attended": 0,
+      "cancelled": 0
+    }
+  },
+  {
+    "learnerID": "SWL3",
+    "learnerName": "LearnerC",
+    "learnerGender": "female",
+    "learnerAge": 11,
+    "learnerEmergencyContact": "7123456789",
+    "learnerCurrentGrade": 0,
+    "learnerLessons": {
+      "booked": 0,
+      "attended": 0,
+      "cancelled": 0
+    }
+  }
+]
