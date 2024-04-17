@@ -1,0 +1,19 @@
+[
+  {
+    "lessonCoach": "Coach A",
+    "lessonDate": "2024-04-17",
+    "lessonDay": "Wednesday",
+    "lessonEndTime": "5pm",
+    "lessonGrade": "1",
+    "lessonSlots": 4,
+    "lessonStartTime": "4pm"
+  },
+  {
+    "lessonCoach": "Coach B",
+    "lessonDate": "2024-04-17",
+    "lessonDay": "Wednesday",
+    "lessonEndTime": "6pm",
+    "lessonGrade": "2",
+    "lessonSlots": 4,
+    "lessonStartTime": "5pm"
+  } ]
