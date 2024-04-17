@@ -8,7 +8,10 @@
     "learnerEmergencyContact": "7123456789",
     "learnerCurrentGrade": 0,
     "learnerLessons": {
-      "booked": {},
+      "booked": [
+        {"bookingID": "ec950abb", "lessonDate": "2024-04-08", "lessonDay": "Monday", "lessonStartTime": "4pm", "lessonEndTime": "5pm", "lessonGrade": "1", "lessonCoach": "CoachA"},
+        {"bookingID": "24535ff2", "lessonDate": "2024-04-10", "lessonDay": "Wednesday", "lessonStartTime": "4pm", "lessonEndTime": "5pm", "lessonGrade": "1", "lessonCoach": "CoachA"}
+      ],
       "attended": {},
       "cancelled": {}
     }
@@ -20,9 +23,9 @@
     "learnerDOB": "2013-2-20",
     "learnerAge": 11,
     "learnerEmergencyContact": "7123456789",
-    "learnerCurrentGrade": 0,
+    "learnerCurrentGrade": 1,
     "learnerLessons": {
-      "booked": {},
+      "booked": [],
       "attended": {},
       "cancelled": {}
     }

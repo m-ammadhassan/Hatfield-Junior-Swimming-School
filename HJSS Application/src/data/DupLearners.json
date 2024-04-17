@@ -1,0 +1,79 @@
+[
+  {
+    "learnerAge": 11,
+    "learnerCurrentGrade": 1,
+    "learnerEmergencyContact": "7123456789",
+    "learnerGender": "male",
+    "learnerID": "SWL1",
+    "learnerLessons": {
+      "attended": [],
+      "booked": [
+        {
+          "lessonEndTime": "5pm",
+          "lessonDate": "2024-04-15",
+          "lessonCoach": "CoachA",
+          "lessonDay": "Monday",
+          "lessonStartTime": "4pm",
+          "bookingID": "ec950abb",
+          "lessonGrade": 1
+        },
+        {
+          "lessonEndTime": "5pm",
+          "lessonDate": "2024-04-17",
+          "lessonCoach": "Coach A",
+          "lessonDay": "Wednesday",
+          "lessonStartTime": "4pm",
+          "bookingID": "e95ba6aa",
+          "lessonGrade": 1
+        }
+      ],
+      "cancelled": []
+    },
+    "learnerName": "Learner A"
+  },
+  {
+    "learnerAge": 11,
+    "learnerCurrentGrade": 4,
+    "learnerEmergencyContact": "7123456789",
+    "learnerGender": "female",
+    "learnerID": "SWL2",
+    "learnerLessons": {
+      "attended": [],
+      "booked": [
+        {
+          "lessonEndTime": "3pm",
+          "lessonDate": "2024-04-13",
+          "lessonCoach": "Coach D",
+          "lessonDay": "Saturday",
+          "lessonStartTime": "2pm",
+          "bookingID": "9536aafd",
+          "lessonGrade": 4
+        }
+      ],
+      "cancelled": []
+    },
+    "learnerName": "Learner B"
+  },
+  {
+    "learnerAge": 9,
+    "learnerCurrentGrade": 0,
+    "learnerEmergencyContact": "7123123123",
+    "learnerGender": "female",
+    "learnerID": "SWL3",
+    "learnerLessons": {
+      "attended": [],
+      "booked": [
+        {
+          "lessonEndTime": "5pm",
+          "lessonDate": "2024-04-19",
+          "lessonCoach": "Coach A",
+          "lessonDay": "Friday",
+          "lessonStartTime": "4pm",
+          "bookingID": "f009f2a9",
+          "lessonGrade": 1
+        }
+      ],
+      "cancelled": []
+    },
+    "learnerName": "Student C"
+  }]

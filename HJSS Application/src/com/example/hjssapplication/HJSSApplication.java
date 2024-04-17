@@ -3,16 +3,11 @@ package com.example.hjssapplication;
 public class HJSSApplication {
     public static void main(String[] args) {
 
-        Welcome wc = new Welcome();
-        //wc.printWelcomeMessage();
-
+//        System.out.println("\n---> Hatfield Junior Swimming School <---\n");
         MainMenu mm = new MainMenu();
         mm.displayMainMenu();
 
-        PracticeJSON pj = new PracticeJSON();
-        //pj.registerInJSON();
-
-
-
+        Practice p = new Practice();
+//        p.functionBookASwimmingLesson();
     }
 }

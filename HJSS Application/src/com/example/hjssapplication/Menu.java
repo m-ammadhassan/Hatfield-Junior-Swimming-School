@@ -12,17 +12,17 @@ public class Menu {
             System.out.print((i+1) + ") " + array[i] + lineStyle);
         }
 
-        int menuOption = selectMenuOption(array.length - (array.length - 1), array.length);
+        int menuOption = selectMenuOption(1, array.length, "Enter your choice");
 
         while(menuOption == 0)
         {
-            menuOption = selectMenuOption(array.length - (array.length - 1), array.length);
+            menuOption = selectMenuOption(1, array.length, "Enter your choice");
         }
         return menuOption;
     }
 
-    public int selectMenuOption(int min, int max) {
-        System.out.print("\nEnter your choice [" + min + "-" + max + "] : ");
+    public int selectMenuOption(int min, int max, String message) {
+        System.out.print("\n" + message + " [" + min + "-" + max + "] : ");
         String menuOption = userInput.nextLine();
         if(validateMenuOption(menuOption, min, max))
         {
