@@ -1,0 +1,32 @@
+[
+  {
+    "coachID": "HJSSC1",
+    "coachName": "Coach A",
+    "coachGrade": "1",
+    "coachRatings": {}
+  },
+  {
+    "coachID": "HJSSC2",
+    "coachName": "Coach B",
+    "coachGrade": "2",
+    "coachRatings": {}
+  },
+  {
+    "coachID": "HJSSC3",
+    "coachName": "Coach C",
+    "coachGrade": "3",
+    "coachRatings": {}
+  },
+  {
+    "coachID": "HJSSC4",
+    "coachName": "Coach D",
+    "coachGrade": "4",
+    "coachRatings": {}
+  },
+  {
+    "coachID": "HJSSC5",
+    "coachName": "Coach E",
+    "coachGrade": "5",
+    "coachRatings": {}
+  }
+]
