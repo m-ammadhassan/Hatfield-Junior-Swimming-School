@@ -214,9 +214,9 @@ public class MainMenu extends Menu {
         String learnerID = newLearner.generateLearnerID();
         newLearner.setLearnerID(learnerID);
 
-        JSONObject newLearnerObject = newLearner.createLearnerObject();
+        JSONObject newLearnerObject = newLearner.methodAddNewLearner();
 
-        if(rm.writeInJSONFile( "src\\data\\", "PracticeLearners.json", newLearnerObject))
+        if(newLearnerObject != null)
         {
             System.out.println(newLearner.getLearnerName() + " is successfully Registered. Details are below:");
             newLearner.getLearnerDetails();

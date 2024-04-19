@@ -85,7 +85,7 @@ public class Learner {
         return "SWL" + (lastLearnerIDNum + 1);
     }
 
-    public JSONObject createLearnerObject()
+    public JSONObject methodAddNewLearner()
     {
         JSONObject newLearnerObject = new JSONObject();
         JSONObject newLearnerLessonsObject = new JSONObject();
@@ -105,7 +105,9 @@ public class Learner {
         newLearnerLessonsObject.put("attended", newLearnerAttendedLessonsArray);
         newLearnerLessonsObject.put("cancelled", newLearnerCancelledLessonsArray);
 
-        return newLearnerObject;
+        if(rm.writeInJSONFile( "src\\data\\", "PracticeLearners.json", newLearnerObject)) return newLearnerObject;
+        else System.out.println("ERROR: Sorry! some error occurred while registering a new learner.");
+        return null;
     }
 
     public void getLearnerDetails()
