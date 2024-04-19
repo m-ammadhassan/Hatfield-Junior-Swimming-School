@@ -94,7 +94,7 @@ public class Timetable {
             if(optionTimetableCoach == (i+1)) timetableCoach = coachList.get(i);
         }
 
-        setTimetable(generateTimetable("lessonCoach", timetableCoach));
+        setTimetable(generateTimetable("coachName", timetableCoach));
     }
 
     public JSONArray generateTimetable(String key, String value)
@@ -124,18 +124,29 @@ public class Timetable {
         return null;
     }
 
-    public void displayTimetable(JSONArray timetable)
+    public void displayTimetable(JSONArray timetable, String title)
     {
-        System.out.println("\n\n||======||======||======|| TIMETABLE ||======||======||======||\n");
+        System.out.println("\n\n||======||======||======|| " + title + " ||======||======||======||\n");
         for(int i=0; i<timetable.size(); i++)
         {
             JSONObject jsonObject = (JSONObject) timetable.get(i);
-            System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDay") +
-                    "\t\t DAY --> " + jsonObject.get("lessonDate") +
-                    "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
-                    "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
-                    "\t\t COACH --> " + jsonObject.get("lessonCoach") +
-                    "\n\tAVAILABLE SLOTS --> " + jsonObject.get("lessonSlots") + "\n");
+            if(jsonObject.get("lessonSlots") != null)
+            {
+                System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDay") +
+                        "\t\t DAY --> " + jsonObject.get("lessonDate") +
+                        "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
+                        "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
+                        "\t\t COACH --> " + jsonObject.get("coachName") +
+                        "\n\tAVAILABLE SLOTS --> " + jsonObject.get("lessonSlots") + "\n");
+            }
+            else
+            {
+                System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDay") +
+                        "\t\t DAY --> " + jsonObject.get("lessonDate") +
+                        "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
+                        "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
+                        "\t\t COACH --> " + jsonObject.get("coachName") + "\n");
+            }
         }
     }
 }

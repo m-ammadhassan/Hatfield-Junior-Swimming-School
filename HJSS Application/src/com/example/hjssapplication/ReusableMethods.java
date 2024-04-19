@@ -1,7 +1,10 @@
 package com.example.hjssapplication;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -18,8 +21,9 @@ import org.json.simple.parser.ParseException;
 public class ReusableMethods {
 
     LocalDate currentDate = LocalDate.now();
-    JSONParser jsonParser = new JSONParser();
-
+    LocalTime currentTime = LocalTime.now();
+    DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("ha");
 
     //Method: For Clearing The Screen
     public void clearConsole()
@@ -158,10 +162,23 @@ public class ReusableMethods {
         return false;
     }
 
+    public Boolean validateAttendLessonTime(Lesson lesson)
+    {
+        LocalDate lessonDate = LocalDate.parse(lesson.getLessonDate(), formatDate);
+        LocalTime lessonEndTime = LocalTime.parse(lesson.getLessonEndTime(), formatTime);
+
+        if((currentDate.isEqual(lessonDate) && currentTime.isAfter(lessonEndTime)) || currentDate.isAfter(lessonDate))
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     //Method: Read and Return Data From JSON
     public JSONArray readFromJSONFile(String filePath, String fileName)
     {
+        JSONParser jsonParser = new JSONParser();
         try
         {
             FileReader fileReader = new FileReader(filePath + fileName);
@@ -225,6 +242,9 @@ public class ReusableMethods {
         }
     }
 
+    public void deleteInJSONFile(String filePath, String fileName)
+    {}
+
     public int getPreviousIndex(String filePath, String fileName, JSONObject previousObject)
     {
         JSONArray jsonArray = readFromJSONFile(filePath, fileName);
@@ -235,4 +255,14 @@ public class ReusableMethods {
         }
         return previousIndex;
     }
+
+    public int getIndex(JSONArray array, JSONObject object)
+    {
+        for(int i=0; i<array.size(); i++)
+        {
+            if(array.get(i).equals(object)) return i;
+        }
+        return 0;
+    }
 }
+

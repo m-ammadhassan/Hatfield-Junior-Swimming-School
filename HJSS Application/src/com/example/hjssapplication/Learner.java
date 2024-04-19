@@ -163,4 +163,22 @@ public class Learner {
         setLearnerCurrentGradeLevel(learnerGrade);
     }
 
+    public Boolean methodUpdateLearnerGradeLevel(JSONObject lessonAttended, JSONObject selectedLearner)
+    {
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
+
+        if(Integer.parseInt(lessonAttended.get("lessonGrade").toString()) > getLearnerCurrentGradeLevel())
+        {
+            setLearnerCurrentGradeLevel(getLearnerCurrentGradeLevel() + 1);
+        }
+
+        selectedLearner.remove("learnerCurrentGrade");
+        selectedLearner.put("learnerCurrentGrade", getLearnerCurrentGradeLevel());
+
+        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return true;
+        else System.out.println("ERROR: Sorry! some error occurred while updating learner grade.");
+        return false;
+    }
+
 }
