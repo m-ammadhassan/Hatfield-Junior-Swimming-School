@@ -54,19 +54,10 @@
           "coachID": "HJSSC1",
           "bookingID": "cd3097d7",
           "lessonGrade": 1
-        },
-        {
-          "lessonEndTime": "6pm",
-          "lessonDate": "2024-04-22",
-          "coachName": "Coach C",
-          "lessonDay": "Monday",
-          "lessonStartTime": "5pm",
-          "coachID": "HJSSC1",
-          "bookingID": "cd3097d7",
-          "lessonGrade": 3
         }
       ],
-      "cancelled": []
+      "cancelled": [
+      ]
     },
     "learnerName": "Learner A"
   },{"learnerLessons":{"attended":[],"booked":[{"lessonEndTime":"3pm","lessonDate":"2024-04-13","coachName":"Coach D","lessonDay":"Saturday","coachID":"HJSSC4","lessonStartTime":"2pm","bookingID":"9536aafd","lessonGrade":4}],"cancelled":[]},"learnerAge":11,"learnerID":"SWL2","learnerCurrentGrade":4,"learnerName":"Learner B","learnerGender":"female","learnerEmergencyContact":"7123456789"},{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":9,"learnerID":"SWL3","learnerCurrentGrade":0,"learnerName":"Student C","learnerGender":"female","learnerEmergencyContact":"7123123123"},{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":8,"learnerID":"SWL4","learnerCurrentGrade":0,"learnerName":"Student D","learnerGender":"male","learnerEmergencyContact":"7121212127"}]

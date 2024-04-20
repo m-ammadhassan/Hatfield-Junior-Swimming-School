@@ -171,6 +171,19 @@ public class ReusableMethods {
         {
             return true;
         }
+        else System.out.println("ERROR: You cannot attend lesson before it's delivered!");
+        return false;
+    }
+
+    public Boolean validateChangeCancelLessonTime(Lesson lesson)
+    {
+        LocalDate lessonDate = LocalDate.parse(lesson.getLessonDate(), formatDate);
+        LocalTime lessonStartTime = LocalTime.parse(lesson.getLessonStartTime(), formatTime);
+        if((currentDate.isEqual(lessonDate) && currentTime.isBefore(lessonStartTime)) || currentDate.isBefore(lessonDate))
+        {
+            return true;
+        }
+        else System.out.println("ERROR: You cannot change or cancel a lesson after it's delivered!");
         return false;
     }
 

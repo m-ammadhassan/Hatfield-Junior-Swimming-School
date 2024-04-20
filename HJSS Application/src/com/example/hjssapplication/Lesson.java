@@ -88,14 +88,32 @@ public class Lesson {
         this.lessonSlots = lessonSlots;
     }
 
-    public void methodUpdateSelectedLessonSlots(JSONObject selectedLesson, Lesson lesson, String lessonType)
+    public void methodUpdateSelectedLessonSlots(JSONObject selectedLesson, String lessonType)
     {
         JSONArray arrayOfLessons = rm.readFromJSONFile("src\\data\\", "PracticeLessons.json");
-        int indexOfLesson = rm.getIndex(arrayOfLessons, selectedLesson);
+        int indexOfLesson = 0;
 
-        selectedLesson.remove("lessonSlots");
-        if(lessonType.equals("booking")) selectedLesson.put("lessonSlots", (lesson.getLessonSlots() - 1));
-        else if(lessonType.equals("cancel") || lessonType.equals("change")) selectedLesson.put("lessonSlots", (lesson.getLessonSlots() + 1));
+        if(lessonType.equals("book"))
+        {
+            indexOfLesson = rm.getIndex(arrayOfLessons, selectedLesson);
+            selectedLesson.remove("lessonSlots");
+            selectedLesson.put("lessonSlots", (getLessonSlots() - 1));
+        }
+        else if(lessonType.equals("cancel"))
+        {
+            selectedLesson.remove("bookingID");
+            int previousSlots = 0;
+            for(int i=0; i<arrayOfLessons.size(); i++)
+            {
+                JSONObject jsonObject = (JSONObject) arrayOfLessons.get(i);
+                if(jsonObject.get("lessonDate").equals(selectedLesson.get("lessonDate")) && jsonObject.get("lessonStartTime").equals(selectedLesson.get("lessonStartTime")))
+                {
+                    previousSlots = Integer.parseInt(jsonObject.get("lessonSlots").toString());
+                    indexOfLesson = i;
+                }
+            }
+            selectedLesson.put("lessonSlots", previousSlots + 1);
+        }
 
         rm.updateInJSONFile("src\\data\\", "PracticeLessons.json", indexOfLesson, selectedLesson);
     }
@@ -144,6 +162,26 @@ public class Lesson {
         learnerBookedLessons.remove(indexOfLesson);
 
         if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonAttended;
+        else System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
+        return null;
+    }
+
+    public JSONObject methodAddLessonInLearnerCancelledLessons(JSONObject selectedLesson, JSONObject selectedLearner)
+    {
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
+
+        JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
+        JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
+        JSONArray learnerCancelledLessons = (JSONArray) learnerLessons.get("cancelled");
+        int indexOfLesson = rm.getIndex(learnerBookedLessons, selectedLesson);
+
+        JSONObject lessonCancelled = (JSONObject) learnerBookedLessons.get(indexOfLesson);
+
+        learnerCancelledLessons.add(lessonCancelled);
+        learnerBookedLessons.remove(indexOfLesson);
+
+        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonCancelled;
         else System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
         return null;
     }
@@ -215,6 +253,21 @@ public class Lesson {
                         "\t\t Coach Name: " + getLessonCoach() +
                         "\nLesson Rating: " + lessonAttended.get("lessonReviewRating") +
                         "\nLesson Review: " + lessonAttended.get("lessonReviewMessage") +
+                        "\n=====================================================================================");
+    }
+
+    public void getCancelledLessonDetails(Learner learner, JSONObject lessonCancelled)
+    {
+        System.out.println(
+                "\n=====================================================================================" +
+                        "\n\t\t\t\t\t\t\tCancelled Lesson Details" +
+                        "\n=====================================================================================" +
+                        "\nLearner Name: " + learner.getLearnerName() +
+                        "\t\t Booking ID: " + lessonCancelled.get("bookingID") +
+                        "\t\t Lesson Date: " + getLessonDate() +
+                        "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
+                        "\t\t Lesson Grade: " + getLessonGrade() +
+                        "\t\t Coach Name: " + getLessonCoach() +
                         "\n=====================================================================================");
     }
 
