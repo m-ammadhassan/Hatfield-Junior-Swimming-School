@@ -1,1 +1,31 @@
-[{"lessonEndTime":"6pm","coachName":"Coach A","lessonDate":"2024-04-22","lessonDay":"Monday","lessonSlots":3,"coachID":"HJSSC1","lessonStartTime":"5pm","lessonGrade":"3"},{"lessonEndTime":"6pm","lessonDate":"2024-04-22","coachName":"Coach C","lessonDay":"Monday","lessonSlots":4,"lessonStartTime":"5pm","coachID":"HJSSC3","lessonGrade":3}]
+[
+  {
+    "coachID": "HJSSC1",
+    "coachName": "Coach A",
+    "lessonDate": "2024-04-22",
+    "lessonDay": "Monday",
+    "lessonEndTime": "5pm",
+    "lessonGrade": 1,
+    "lessonSlots": 3,
+    "lessonStartTime": "4pm"
+  },
+  {
+    "coachID": "HJSSC3",
+    "coachName": "Coach C",
+    "lessonDate": "2024-04-22",
+    "lessonDay": "Monday",
+    "lessonEndTime": "6pm",
+    "lessonGrade": 3,
+    "lessonSlots": 4,
+    "lessonStartTime": "5pm"
+  },
+  {
+    "coachID": "HJSSC3",
+    "coachName": "Coach C",
+    "lessonDate": "2024-04-24",
+    "lessonDay": "Wednesday",
+    "lessonEndTime": "6pm",
+    "lessonGrade": 3,
+    "lessonSlots": 3,
+    "lessonStartTime": "5pm"
+  }]

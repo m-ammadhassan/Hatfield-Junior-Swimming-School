@@ -54,9 +54,30 @@
           "coachID": "HJSSC1",
           "bookingID": "cd3097d7",
           "lessonGrade": 1
+        },
+        {
+          "lessonEndTime": "6pm",
+          "coachName": "Coach C",
+          "lessonDate": "2024-04-24",
+          "lessonDay": "Wednesday",
+          "coachID": "HJSSC3",
+          "lessonStartTime": "5pm",
+          "bookingID": "44b1cf31",
+          "lessonGrade": 3
         }
       ],
       "cancelled": [
+        {
+          "lessonEndTime": "6pm",
+          "lessonDate": "2024-04-24",
+          "coachName": "Coach C",
+          "lessonDay": "Wednesday",
+          "lessonSlots": 4,
+          "lessonStartTime": "5pm",
+          "coachID": "HJSSC3",
+          "bookingID": "687e619d",
+          "lessonGrade": 3
+        }
       ]
     },
     "learnerName": "Learner A"

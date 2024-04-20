@@ -15,6 +15,7 @@ public class Lesson {
     private String lessonCoach;
     private int lessonSlots;
 
+    Menu m = new Menu();
     Timetable tt = new Timetable();
     ReusableMethods rm = new ReusableMethods();
 
@@ -99,7 +100,7 @@ public class Lesson {
             selectedLesson.remove("lessonSlots");
             selectedLesson.put("lessonSlots", (getLessonSlots() - 1));
         }
-        else if(lessonType.equals("cancel"))
+        else if(lessonType.equals("cancel") || lessonType.equals("change"))
         {
             selectedLesson.remove("bookingID");
             int previousSlots = 0;
@@ -118,7 +119,7 @@ public class Lesson {
         rm.updateInJSONFile("src\\data\\", "PracticeLessons.json", indexOfLesson, selectedLesson);
     }
 
-    public JSONObject methodAddLessonInLearnerBookedLessons(Lesson lesson, JSONObject selectedLesson, JSONObject selectedLearner)
+    public JSONObject methodAddLessonInLearnerBookedLessons(JSONObject selectedLesson, JSONObject selectedLearner)
     {
         JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
@@ -128,12 +129,12 @@ public class Lesson {
 
         JSONObject lessonBooked = new JSONObject();
         lessonBooked.put("bookingID", methodGenerateBookingID());
-        lessonBooked.put("lessonDate", lesson.getLessonDate());
-        lessonBooked.put("lessonDay", lesson.getLessonDay());
-        lessonBooked.put("lessonStartTime", lesson.getLessonStartTime());
-        lessonBooked.put("lessonEndTime", lesson.getLessonEndTime());
-        lessonBooked.put("lessonGrade", lesson.getLessonGrade());
-        lessonBooked.put("coachName", lesson.getLessonCoach());
+        lessonBooked.put("lessonDate", getLessonDate());
+        lessonBooked.put("lessonDay", getLessonDay());
+        lessonBooked.put("lessonStartTime", getLessonStartTime());
+        lessonBooked.put("lessonEndTime", getLessonEndTime());
+        lessonBooked.put("lessonGrade", getLessonGrade());
+        lessonBooked.put("coachName", getLessonCoach());
         lessonBooked.put("coachID", selectedLesson.get("coachID"));
 
         learnerBookedLessons.add(lessonBooked);
@@ -162,7 +163,7 @@ public class Lesson {
         learnerBookedLessons.remove(indexOfLesson);
 
         if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonAttended;
-        else System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
+        else System.out.println("ERROR: Sorry! some error occurred while marking lesson attended.");
         return null;
     }
 
@@ -175,14 +176,43 @@ public class Lesson {
         JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
         JSONArray learnerCancelledLessons = (JSONArray) learnerLessons.get("cancelled");
         int indexOfLesson = rm.getIndex(learnerBookedLessons, selectedLesson);
+        String previousBookingID = selectedLesson.get("bookingID").toString();
 
         JSONObject lessonCancelled = (JSONObject) learnerBookedLessons.get(indexOfLesson);
 
+        methodUpdateSelectedLessonSlots(selectedLesson, "cancel");
+
+        lessonCancelled.put("bookingID", previousBookingID);
         learnerCancelledLessons.add(lessonCancelled);
         learnerBookedLessons.remove(indexOfLesson);
 
         if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonCancelled;
-        else System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
+        else System.out.println("ERROR: Sorry! some error occurred while cancelling lesson.");
+        return null;
+    }
+
+    public JSONObject methodUpdateLessonInLearnerBookedLessons(JSONObject previousLesson, JSONObject newLesson, JSONObject selectedLearner)
+    {
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
+
+        JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
+        JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
+        int indexOfPreviousLesson = rm.getIndex(learnerBookedLessons, previousLesson);
+        String previousBookingID = previousLesson.get("bookingID").toString();
+
+        methodUpdateSelectedLessonSlots(previousLesson, "change");
+        methodUpdateSelectedLessonSlots(newLesson, "book");
+
+        newLesson.remove("lessonSlots");
+        newLesson.put("bookingID", previousBookingID);
+
+        learnerBookedLessons.add(newLesson);
+        learnerBookedLessons.remove(indexOfPreviousLesson);
+        System.out.println(learnerBookedLessons);
+
+        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return newLesson;
+        else System.out.println("ERROR: Sorry! some error occurred while changing lesson.");
         return null;
     }
 
@@ -226,7 +256,7 @@ public class Lesson {
     {
         System.out.println(
                 "\n=====================================================================================" +
-                "\n\t\t\t\t\t\t\tBooking Details" +
+                "\n\t\t\t\t\t\t\tBooked Lesson Details" +
                 "\n=====================================================================================" +
                 "\nLearner Name: " + learner.getLearnerName() +
                 "\t\t Booking ID: " + lessonBooked.get("bookingID") +
@@ -271,8 +301,40 @@ public class Lesson {
                         "\n=====================================================================================");
     }
 
-    public void setLessonDetails()
+    public void getChangedLessonDetails(Learner learner, JSONObject lessonChanged)
     {
+        {
+            System.out.println(
+                    "\n=====================================================================================" +
+                            "\n\t\t\t\t\t\t\tChanged Lesson Details" +
+                            "\n=====================================================================================" +
+                            "\nLearner Name: " + learner.getLearnerName() +
+                            "\t\t Booking ID: " + lessonChanged.get("bookingID") +
+                            "\t\t Lesson Date: " + getLessonDate() +
+                            "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
+                            "\t\t Lesson Grade: " + getLessonGrade() +
+                            "\t\t Coach Name: " + getLessonCoach() +
+                            "\nLesson Start Time: " + getLessonStartTime() +
+                            "\t\t Lesson End Time: " + getLessonEndTime() +
+                            "\n=====================================================================================");
+        }
+    }
 
+    public JSONObject setLessonDetailsFromJSON(Timetable timetable)
+    {
+        int optionSelectLesson = m.selectMenuOption(1, timetable.getTimetable().size(), "Select a Lesson");
+        while(optionSelectLesson == 0) { optionSelectLesson = m.selectMenuOption(1, timetable.getTimetable().size(), "Select a Lesson"); }
+        JSONObject lessonDetails = (JSONObject) timetable.getTimetable().get(optionSelectLesson-1);
+
+        setLessonDate(lessonDetails.get("lessonDate").toString());
+        setLessonDay(lessonDetails.get("lessonDay").toString());
+        setLessonStartTime(lessonDetails.get("lessonStartTime").toString());
+        setLessonEndTime(lessonDetails.get("lessonEndTime").toString());
+        setLessonGrade(Integer.parseInt(lessonDetails.get("lessonGrade").toString()));
+        setLessonCoach(lessonDetails.get("coachName").toString());
+        if(lessonDetails.get("lessonSlots") != null) setLessonSlots(Integer.parseInt(lessonDetails.get("lessonSlots").toString()));
+        else setLessonSlots(0);
+
+        return lessonDetails;
     }
 }

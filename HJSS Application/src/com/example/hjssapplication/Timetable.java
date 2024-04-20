@@ -24,6 +24,8 @@ public class Timetable {
         this.timetable = timetable;
     }
 
+//    public void timet
+
     // Method: Display and Ask user for the Type of Timetable
     public int displayMenuTimetableType()
     {
@@ -124,29 +126,44 @@ public class Timetable {
         return null;
     }
 
-    public void displayTimetable(JSONArray timetable, String title)
+    public Boolean displayTimetable()
     {
-        System.out.println("\n\n||======||======||======|| " + title + " ||======||======||======||\n");
-        for(int i=0; i<timetable.size(); i++)
-        {
-            JSONObject jsonObject = (JSONObject) timetable.get(i);
-            if(jsonObject.get("lessonSlots") != null)
-            {
-                System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDay") +
-                        "\t\t DAY --> " + jsonObject.get("lessonDate") +
+        int optionTimetableType = displayMenuTimetableType();
+
+        actionOnMenuTimetableType(optionTimetableType);
+
+        if(getTimetable() != null) {
+            System.out.println("\n\n||======||======||======|| TIMETABLE ||======||======||======||\n");
+            for (int i = 0; i < getTimetable().size(); i++) {
+                JSONObject jsonObject = (JSONObject) timetable.get(i);
+                System.out.println((i + 1) + " - DATE --> " + jsonObject.get("lessonDate") +
+                        "\t\t DAY --> " + jsonObject.get("lessonDay") +
                         "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
                         "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
                         "\t\t COACH --> " + jsonObject.get("coachName") +
                         "\n\tAVAILABLE SLOTS --> " + jsonObject.get("lessonSlots") + "\n");
             }
-            else
-            {
-                System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDay") +
-                        "\t\t DAY --> " + jsonObject.get("lessonDate") +
-                        "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
-                        "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
-                        "\t\t COACH --> " + jsonObject.get("coachName") + "\n");
-            }
+            return true;
+        }
+        else return false;
+    }
+
+    public void displayTimetableOfLeanerBookedLessons(JSONObject selectedLearner)
+    {
+        JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
+        JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
+
+        setTimetable(learnerBookedLessons);
+
+        System.out.println("\n\n||======||======||======|| Booked Lessons ||======||======||======||\n");
+        for(int i=0; i<getTimetable().size(); i++)
+        {
+            JSONObject jsonObject = (JSONObject) timetable.get(i);
+            System.out.println((i+1) + " - DATE --> " + jsonObject.get("lessonDate") +
+                    "\t\t DAY --> " + jsonObject.get("lessonDay") +
+                    "\t\t TIME --> " + jsonObject.get("lessonStartTime") + "-" + jsonObject.get("lessonEndTime") +
+                    "\n\tGRADE --> " + jsonObject.get("lessonGrade") +
+                    "\t\t COACH --> " + jsonObject.get("coachName") + "\n");
         }
     }
 }

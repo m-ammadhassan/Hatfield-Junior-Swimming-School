@@ -11,6 +11,7 @@ public class MainMenu extends Menu {
     ReusableMethods rm = new ReusableMethods();
     Timetable tt = new Timetable();
     Learner learner = new Learner();
+    Lesson lesson = new Lesson();
     YesNoMenu ynm = new YesNoMenu();
 
     public void displayMainMenu()
@@ -42,46 +43,22 @@ public class MainMenu extends Menu {
 
         JSONObject selectedLesson = new JSONObject();
 
-        int optionTimetableType = tt.displayMenuTimetableType();
-
-        tt.actionOnMenuTimetableType(optionTimetableType);
-
-        if(tt.getTimetable() != null) tt.displayTimetable(tt.getTimetable(), "TIMETABLE");
-        else displayTryAgainMenu("Do you want to try again?", 1);
+        if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
 
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = methodSelectALesson(); else displayMainMenu();
+        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
-        Lesson lesson = new Lesson(
-                selectedLesson.get("lessonDate").toString(),
-                selectedLesson.get("lessonDay").toString(),
-                selectedLesson.get("lessonStartTime").toString(),
-                selectedLesson.get("lessonEndTime").toString(),
-                Integer.parseInt(selectedLesson.get("lessonGrade").toString()),
-                selectedLesson.get("coachName").toString(),
-                Integer.parseInt(selectedLesson.get("lessonSlots").toString())
-        );
-
-        JSONObject learnerDetails = methodGetALearner();
-
-        learner = new Learner(
-                learnerDetails.get("learnerID").toString(),
-                learnerDetails.get("learnerName").toString(),
-                learnerDetails.get("learnerGender").toString(),
-                Integer.parseInt(learnerDetails.get("learnerAge").toString()),
-                learnerDetails.get("learnerEmergencyContact").toString(),
-                Integer.parseInt(learnerDetails.get("learnerCurrentGrade").toString())
-        );
+        JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
         if(!rm.validateGradeLevel(lesson, learner)) displayTryAgainMenu("Do you want to try again?", 1);
 
-        if(!rm.validatePreviousBooking(lesson, learnerDetails)) displayTryAgainMenu("Do you want to try again?", 1);
+        if(!rm.validatePreviousBooking(lesson, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
 
         if(!rm.validateLessonAvailableSlots(lesson)) displayTryAgainMenu("Do you want to try again?", 1);
 
         lesson.methodUpdateSelectedLessonSlots(selectedLesson, "book");
 
-        JSONObject lessonBooked = lesson.methodAddLessonInLearnerBookedLessons(lesson, selectedLesson, learnerDetails);
+        JSONObject lessonBooked = lesson.methodAddLessonInLearnerBookedLessons(selectedLesson, selectedLearner);
 
         if(lessonBooked!=null) {
             System.out.println("\nDear " + learner.getLearnerName() + ", you have successfully booked a lesson. Details are below:");
@@ -90,39 +67,6 @@ public class MainMenu extends Menu {
         else displayTryAgainMenu("\nDo you want to try again?", 1);
 
         displayTryAgainMenu("\nDo you want to book a new lesson?", 1);
-    }
-
-    public JSONObject methodSelectALesson(){
-        int optionSelectLesson = selectMenuOption(1, tt.getTimetable().size(), "Select a Lesson");
-        while(optionSelectLesson == 0) { optionSelectLesson = selectMenuOption(1, tt.getTimetable().size(), "Select a Lesson"); }
-        JSONObject selectedLesson = (JSONObject) tt.getTimetable().get(optionSelectLesson-1);
-        return selectedLesson;
-    }
-
-    public JSONObject methodGetALearner(){
-        String learnerID = learner.getLearnerID();
-        JSONArray jsonArray = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
-        JSONObject learnerDetails = new JSONObject();
-
-        // Get a learner ID first time
-        if(learnerID.isEmpty())
-        {
-            // Repeat until Learner enters his/her valid ID number
-            do {
-                System.out.print("\nEnter your Learner ID: SWL");
-                learnerID = rm.validateLearnerID(userInput.nextLine().replace(" ", ""));
-            }
-            while(learnerID == null);
-        }
-
-        // Search in jsonArray to get the details of the Learner
-        for(int i=0; i < jsonArray.size(); i++)
-        {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-            if(jsonObject.get("learnerID").equals(learnerID)) learnerDetails = (JSONObject) jsonArray.get(i);
-        }
-
-        return learnerDetails;
     }
 
     // Main Menu Function 4: Change or Cancel a Swimming Lesson
@@ -141,45 +85,58 @@ public class MainMenu extends Menu {
 
     // Sub Menu Function 4-1: Change a Swimming Lesson
     public void functionChangeSwimmingLesson()
-    {}
+    {
+        JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
+
+        tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
+
+        JSONObject previousLesson = new JSONObject();
+
+        System.out.println("Do you want to select a Lesson?");
+        if(ynm.displayYesNoMenu()) previousLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+
+        if(!rm.validateChangeCancelLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 6);
+
+        System.out.println("\n\nSelect a New Lesson: \n");
+
+        if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
+
+        JSONObject newLesson = new JSONObject();
+
+        System.out.println("Do you want to select a Lesson?");
+        if(ynm.displayYesNoMenu()) newLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+
+        if(!rm.validateGradeLevel(lesson, learner)) displayTryAgainMenu("Do you want to try again?", 1);
+
+        if(!rm.validatePreviousBooking(lesson, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
+
+        if(!rm.validateLessonAvailableSlots(lesson)) displayTryAgainMenu("Do you want to try again?", 1);
+
+        JSONObject lessonChanged = lesson.methodUpdateLessonInLearnerBookedLessons(previousLesson, newLesson, selectedLearner);
+
+        if(lessonChanged!=null) {
+            System.out.println("\nDear " + learner.getLearnerName() + ", you have successfully changed a lesson. Details are below:");
+            lesson.getChangedLessonDetails(learner, lessonChanged);
+        }
+        else displayTryAgainMenu("\nDo you want to try again?", 1);
+
+        displayTryAgainMenu("\nDo you want to change another lesson?", 1);
+    }
 
     // Sub Menu Function 4-2: Cancel a Swimming Lesson
     public void functionCancelSwimmingLesson()
     {
         JSONObject selectedLesson = new JSONObject();
-        JSONObject learnerDetails = methodGetALearner();
+        JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
-        learner = new Learner(
-                learnerDetails.get("learnerID").toString(),
-                learnerDetails.get("learnerName").toString(),
-                learnerDetails.get("learnerGender").toString(),
-                Integer.parseInt(learnerDetails.get("learnerAge").toString()),
-                learnerDetails.get("learnerEmergencyContact").toString(),
-                Integer.parseInt(learnerDetails.get("learnerCurrentGrade").toString())
-        );
-
-        JSONObject learnerLessons = (JSONObject) learnerDetails.get("learnerLessons");
-        JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
-
-        tt.setTimetable(learnerBookedLessons);
-        tt.displayTimetable(tt.getTimetable(), "Booked Lessons");
+        tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
 
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = methodSelectALesson(); else displayMainMenu();
-
-        Lesson lesson = new Lesson(
-                selectedLesson.get("lessonDate").toString(),
-                selectedLesson.get("lessonDay").toString(),
-                selectedLesson.get("lessonStartTime").toString(),
-                selectedLesson.get("lessonEndTime").toString(),
-                Integer.parseInt(selectedLesson.get("lessonGrade").toString()),
-                selectedLesson.get("coachName").toString(),
-                0
-        );
+        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateChangeCancelLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 7);
 
-        JSONObject lessonCancelled = lesson.methodAddLessonInLearnerCancelledLessons(selectedLesson, learnerDetails);
+        JSONObject lessonCancelled = lesson.methodAddLessonInLearnerCancelledLessons(selectedLesson, selectedLearner);
 
         if(lessonCancelled!=null)
         {
@@ -187,8 +144,6 @@ public class MainMenu extends Menu {
             lesson.getCancelledLessonDetails(learner, selectedLesson);
         }
         else displayTryAgainMenu("\nDo you want to try again?", 7);
-
-        lesson.methodUpdateSelectedLessonSlots(selectedLesson, "cancel");
 
         displayTryAgainMenu("\nDo you want to cancel another lesson?", 7);
     }
@@ -200,35 +155,12 @@ public class MainMenu extends Menu {
         System.out.println("\n||===== Attend a Swimming Lesson =====||\n");
 
         JSONObject selectedLesson = new JSONObject();
-        JSONObject learnerDetails = methodGetALearner();
+        JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
-        learner = new Learner(
-                learnerDetails.get("learnerID").toString(),
-                learnerDetails.get("learnerName").toString(),
-                learnerDetails.get("learnerGender").toString(),
-                Integer.parseInt(learnerDetails.get("learnerAge").toString()),
-                learnerDetails.get("learnerEmergencyContact").toString(),
-                Integer.parseInt(learnerDetails.get("learnerCurrentGrade").toString())
-        );
-
-        JSONObject learnerLessons = (JSONObject) learnerDetails.get("learnerLessons");
-        JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
-
-        tt.setTimetable(learnerBookedLessons);
-        tt.displayTimetable(tt.getTimetable(), "Booked Lessons");
+        tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
 
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = methodSelectALesson(); else displayMainMenu();
-
-        Lesson lesson = new Lesson(
-                selectedLesson.get("lessonDate").toString(),
-                selectedLesson.get("lessonDay").toString(),
-                selectedLesson.get("lessonStartTime").toString(),
-                selectedLesson.get("lessonEndTime").toString(),
-                Integer.parseInt(selectedLesson.get("lessonGrade").toString()),
-                selectedLesson.get("coachName").toString(),
-                0
-        );
+        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateAttendLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 3);
 
@@ -243,9 +175,9 @@ public class MainMenu extends Menu {
         String lessonReviewMessage = userInput.nextLine();
         review.setReviewMessage(lessonReviewMessage);
 
-        JSONObject lessonAttended = lesson.methodAddLessonInLearnerAttendedLessons(selectedLesson, learnerDetails, review);
+        JSONObject lessonAttended = lesson.methodAddLessonInLearnerAttendedLessons(selectedLesson, selectedLearner, review);
 
-        if(learner.methodUpdateLearnerGradeLevel(lessonAttended, learnerDetails)) lesson.methodUpdateBookedLessonsOnGradeUpgrade(learnerDetails);
+        if(learner.methodUpdateLearnerGradeLevel(lessonAttended, selectedLearner)) lesson.methodUpdateBookedLessonsOnGradeUpgrade(selectedLearner);
 
         if(lessonAttended!=null) {
             System.out.println("\nDear " + learner.getLearnerName() + ", your lesson is marked attended. Details are below:");
