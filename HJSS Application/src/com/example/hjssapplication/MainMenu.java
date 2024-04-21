@@ -1,18 +1,18 @@
 package com.example.hjssapplication;
 
-import java.util.Scanner;
-
 import org.json.simple.JSONObject;
 
 public class MainMenu extends Menu {
-    Scanner userInput = new Scanner(System.in);
     ReusableMethods rm = new ReusableMethods();
     Timetable tt = new Timetable();
     Learner learner = new Learner();
     Lesson lesson = new Lesson();
+    Coach coach = new Coach();
     Report report = new Report();
+    Review review = new Review();
     YesNoMenu ynm = new YesNoMenu();
 
+    // Display Main Menu
     public void displayMainMenu()
     {
         String[] arrayMainMenu = {"Book a Swimming Lesson", "Change / Cancel Booking", "Attend a Swimming Lesson", "Monthly Reports", "Register a New Learner", "Exit"};
@@ -20,6 +20,7 @@ public class MainMenu extends Menu {
         actionOnMainMenuOption(optionMainMenu);
     }
 
+    // Trigger function on the basis of selected option
     public void actionOnMainMenuOption(int optionMainMenu)
     {
         switch(optionMainMenu)
@@ -29,7 +30,7 @@ public class MainMenu extends Menu {
             case 3: functionAttendSwimmingLesson(); break;
             case 4: functionGenerateMonthlyReports(); break;
             case 5: functionRegisterLearner(); break;
-            case 6: System.out.println("Exit from System"); System.exit(0); break;
+            case 6: System.out.println("Exit from Application"); System.exit(0); break;
             default: System.out.println("ERROR: Please select correct option!");
         }
     }
@@ -42,6 +43,7 @@ public class MainMenu extends Menu {
 
         JSONObject selectedLesson = new JSONObject();
 
+        // Display timetable if available. Otherwise, Try Again
         if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
 
         System.out.println("Do you want to select a Lesson?");
@@ -49,11 +51,7 @@ public class MainMenu extends Menu {
 
         JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
-        if(!rm.validateGradeLevel(lesson, learner)) displayTryAgainMenu("Do you want to try again?", 1);
-
-        if(!rm.validatePreviousBooking(lesson, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
-
-        if(!rm.validateLessonAvailableSlots(lesson)) displayTryAgainMenu("Do you want to try again?", 1);
+        if(!rm.validateBookLesson(lesson, learner, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
 
         lesson.methodUpdateSelectedLessonSlots(selectedLesson, "book");
 
@@ -61,14 +59,14 @@ public class MainMenu extends Menu {
 
         if(lessonBooked!=null) {
             System.out.println("\nDear " + learner.getLearnerName() + ", you have successfully booked a lesson. Details are below:");
-            lesson.getBookedLessonDetails(learner, lessonBooked);
+            lesson.methodDisplayLessonDetails(learner, lessonBooked, "Booked");
         }
         else displayTryAgainMenu("\nDo you want to try again?", 1);
 
         displayTryAgainMenu("\nDo you want to book a new lesson?", 1);
     }
 
-    // Main Menu Function 4: Change or Cancel a Swimming Lesson
+    // Main Menu Function 2: Change or Cancel a Swimming Lesson
     public void functionChangeCancelSwimmingLesson()
     {
         // Function Title
@@ -82,7 +80,7 @@ public class MainMenu extends Menu {
         else if(optionChangeCancelMenu == 2) functionCancelSwimmingLesson();
     }
 
-    // Sub Menu Function 4-1: Change a Swimming Lesson
+    // Sub Menu Function 2-1: Change a Swimming Lesson
     public void functionChangeSwimmingLesson()
     {
         JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
@@ -90,7 +88,6 @@ public class MainMenu extends Menu {
         tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
 
         JSONObject previousLesson = new JSONObject();
-
         System.out.println("Do you want to select a Lesson?");
         if(ynm.displayYesNoMenu()) previousLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
@@ -101,35 +98,30 @@ public class MainMenu extends Menu {
         if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
 
         JSONObject newLesson = new JSONObject();
-
         System.out.println("Do you want to select a Lesson?");
         if(ynm.displayYesNoMenu()) newLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
-        if(!rm.validateGradeLevel(lesson, learner)) displayTryAgainMenu("Do you want to try again?", 1);
-
-        if(!rm.validatePreviousBooking(lesson, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
-
-        if(!rm.validateLessonAvailableSlots(lesson)) displayTryAgainMenu("Do you want to try again?", 1);
+        if(!rm.validateBookLesson(lesson, learner, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
 
         JSONObject lessonChanged = lesson.methodUpdateLessonInLearnerBookedLessons(previousLesson, newLesson, selectedLearner);
 
         if(lessonChanged!=null) {
             System.out.println("\nDear " + learner.getLearnerName() + ", you have successfully changed a lesson. Details are below:");
-            lesson.getChangedLessonDetails(learner, lessonChanged);
+            lesson.methodDisplayLessonDetails(learner, lessonChanged, "Changed");
         }
         else displayTryAgainMenu("\nDo you want to try again?", 1);
 
         displayTryAgainMenu("\nDo you want to change another lesson?", 1);
     }
 
-    // Sub Menu Function 4-2: Cancel a Swimming Lesson
+    // Sub Menu Function 2-2: Cancel a Swimming Lesson
     public void functionCancelSwimmingLesson()
     {
-        JSONObject selectedLesson = new JSONObject();
         JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
         tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
 
+        JSONObject selectedLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
         if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
@@ -140,7 +132,7 @@ public class MainMenu extends Menu {
         if(lessonCancelled!=null)
         {
             System.out.println("\nDear " + learner.getLearnerName() + ", your lesson is cancelled. Details are below:");
-            lesson.getCancelledLessonDetails(learner, selectedLesson);
+            lesson.methodDisplayLessonDetails(learner, selectedLesson, "Cancelled");
         }
         else displayTryAgainMenu("\nDo you want to try again?", 7);
 
@@ -153,41 +145,31 @@ public class MainMenu extends Menu {
         // Function Title
         System.out.println("\n||===== Attend a Swimming Lesson =====||\n");
 
-        JSONObject selectedLesson = new JSONObject();
         JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
         tt.displayTimetableOfLeanerBookedLessons(selectedLearner);
 
+        JSONObject selectedLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
         if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateAttendLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 3);
 
-        Review review = new Review();
-        Coach coach = new Coach();
-        System.out.println("\nGive rating about the lesson: ");
-        String[] arrayLessonRating = {"Very Dissatisfied", "Dissatisfied", "Ok", "Satisfied", "Very Satisfied"};
-        int lessonReviewRating = displayMenu(arrayLessonRating, "\t\t");
-        review.setReviewRating(lessonReviewRating);
-
-        System.out.println("\nWrite a review about the lesson: ");
-        String lessonReviewMessage = userInput.nextLine();
-        review.setReviewMessage(lessonReviewMessage);
+        review.methodSetNewReviewDetails();
 
         JSONObject lessonAttended = lesson.methodAddLessonInLearnerAttendedLessons(selectedLesson, selectedLearner, review);
 
-        if(learner.methodUpdateLearnerGradeLevel(lessonAttended, selectedLearner)) lesson.methodUpdateBookedLessonsOnGradeUpgrade(selectedLearner);
-
         if(lessonAttended!=null) {
             System.out.println("\nDear " + learner.getLearnerName() + ", your lesson is marked attended. Details are below:");
-            lesson.getAttendedLessonDetails(learner, lessonAttended);
+            lesson.methodDisplayLessonDetails(learner, lessonAttended, "Attended");
         }
         else displayTryAgainMenu("\nDo you want to try again?", 3);
 
-        coach.methodAddCoachReview(review, learner, selectedLesson);
+        if(learner.methodUpdateLearnerGradeLevel(lessonAttended, selectedLearner)) lesson.methodUpdateBookedLessonsOnGradeUpgrade(selectedLearner);
+
+        coach.methodAddCoachReview(learner, lessonAttended);
 
         displayTryAgainMenu("\nDo you want to mark another lesson attended?", 3);
-
     }
 
     // Mani Menu Function 4: Generate Monthly Reports
@@ -211,6 +193,7 @@ public class MainMenu extends Menu {
     {
         report.methodDisplayReportHeader("Monthly Report of Learners");
         report.methodDisplayReportOfLearners();
+        displaySystemMenu("Select an option", 4);
     }
 
     // Sub Menu Function 4-2: Generate Monthly Report of Coaches
@@ -218,6 +201,7 @@ public class MainMenu extends Menu {
     {
         report.methodDisplayReportHeader("Monthly Report of Coaches");
         report.methodDisplayReportOfCoaches();
+        displaySystemMenu("Select an option", 4);
     }
 
     // Main Menu Function 5: Register a Learner
@@ -226,23 +210,18 @@ public class MainMenu extends Menu {
         // Function Title
         System.out.println("\n||===== Register a Learner =====||\n");
 
-        Learner newLearner = new Learner();
-
         do {
-            newLearner.setNewLearnerDetails();
+            learner.setNewLearnerDetails();
             System.out.println("\nAre you sure all the details are correct?");
         }
         while (!ynm.displayYesNoMenu());
 
-        String learnerID = newLearner.generateLearnerID();
-        newLearner.setLearnerID(learnerID);
+        JSONObject registeredLearner = learner.methodAddNewLearner();
 
-        JSONObject newLearnerObject = newLearner.methodAddNewLearner();
-
-        if(newLearnerObject != null)
+        if(registeredLearner != null)
         {
-            System.out.println(newLearner.getLearnerName() + " is successfully Registered. Details are below:");
-            newLearner.getLearnerDetails();
+            System.out.println(learner.getLearnerName() + " is successfully Registered. Details are below:");
+            learner.getLearnerDetails();
         }
         else displayTryAgainMenu("\nDo you want to try again?", 5);
 
@@ -259,6 +238,16 @@ public class MainMenu extends Menu {
             else if(optionMainMenu == 7) functionCancelSwimmingLesson();
         }
         else displayMainMenu();
+    }
+
+    public void displaySystemMenu(String systemMessage, int optionMainMenu)
+    {
+        System.out.println("\n" + systemMessage);
+        String[] arraySystemMenu = {"Repeat", "Main Menu", "Exit"};
+        int optionSystemMenu = displayMenu(arraySystemMenu, "\t\t");
+        if(optionSystemMenu == 1) actionOnMainMenuOption(optionMainMenu);
+        else if(optionSystemMenu == 2) displayMainMenu();
+        else actionOnMainMenuOption(6);
     }
 
 }
