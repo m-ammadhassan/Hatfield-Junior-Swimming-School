@@ -9,6 +9,30 @@
       "attended": [
         {
           "lessonEndTime": "5pm",
+          "lessonDate": "2024-03-20",
+          "coachName": "Coach A",
+          "lessonDay": "Wednesday",
+          "lessonReviewMessage": "Nice",
+          "coachID": "HJSSC1",
+          "lessonStartTime": "4pm",
+          "bookingID": "e95ba6aa",
+          "lessonGrade": 1,
+          "lessonReviewRating": 5
+        },
+        {
+          "lessonEndTime": "5pm",
+          "lessonDate": "2024-03-22",
+          "coachName": "Coach A",
+          "lessonDay": "Friday",
+          "lessonReviewMessage": "Good",
+          "lessonStartTime": "4pm",
+          "coachID": "HJSSC1",
+          "bookingID": "70a9792e",
+          "lessonGrade": 1,
+          "lessonReviewRating": 4
+        },
+        {
+          "lessonEndTime": "5pm",
           "lessonDate": "2024-04-17",
           "coachName": "Coach A",
           "lessonDay": "Wednesday",
@@ -47,6 +71,26 @@
       "booked": [
         {
           "lessonEndTime": "5pm",
+          "lessonDate": "2024-03-11",
+          "coachName": "Coach A",
+          "lessonDay": "Monday",
+          "lessonStartTime": "4pm",
+          "coachID": "HJSSC1",
+          "bookingID": "cd3097d7",
+          "lessonGrade": 1
+        },
+        {
+          "lessonEndTime": "5pm",
+          "lessonDate": "2024-03-18",
+          "coachName": "Coach A",
+          "lessonDay": "Monday",
+          "lessonStartTime": "4pm",
+          "coachID": "HJSSC1",
+          "bookingID": "cd3097d7",
+          "lessonGrade": 1
+        },
+        {
+          "lessonEndTime": "5pm",
           "lessonDate": "2024-04-15",
           "coachName": "Coach A",
           "lessonDay": "Monday",
@@ -81,4 +125,38 @@
       ]
     },
     "learnerName": "Learner A"
-  },{"learnerLessons":{"attended":[],"booked":[{"lessonEndTime":"3pm","lessonDate":"2024-04-13","coachName":"Coach D","lessonDay":"Saturday","coachID":"HJSSC4","lessonStartTime":"2pm","bookingID":"9536aafd","lessonGrade":4}],"cancelled":[]},"learnerAge":11,"learnerID":"SWL2","learnerCurrentGrade":4,"learnerName":"Learner B","learnerGender":"female","learnerEmergencyContact":"7123456789"},{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":9,"learnerID":"SWL3","learnerCurrentGrade":0,"learnerName":"Student C","learnerGender":"female","learnerEmergencyContact":"7123123123"},{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":8,"learnerID":"SWL4","learnerCurrentGrade":0,"learnerName":"Student D","learnerGender":"male","learnerEmergencyContact":"7121212127"}]
+  },
+  {
+    "learnerAge": 11,
+    "learnerCurrentGrade": 4,
+    "learnerEmergencyContact": "7123456789",
+    "learnerGender": "female",
+    "learnerID": "SWL2",
+    "learnerLessons": {
+      "attended": [],
+      "booked": [
+        {
+          "lessonEndTime": "3pm",
+          "lessonDate": "2024-04-13",
+          "coachName": "Coach D",
+          "lessonDay": "Saturday",
+          "coachID": "HJSSC4",
+          "lessonStartTime": "2pm",
+          "bookingID": "9536aafd",
+          "lessonGrade": 4
+        },
+        {
+          "lessonEndTime": "3pm",
+          "lessonDate": "2024-04-13",
+          "coachName": "Coach D",
+          "lessonDay": "Saturday",
+          "coachID": "HJSSC4",
+          "lessonStartTime": "2pm",
+          "bookingID": "9536aafd",
+          "lessonGrade": 4
+        }
+      ],
+      "cancelled": []
+    },
+    "learnerName": "Learner B"
+  },{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":9,"learnerID":"SWL3","learnerCurrentGrade":0,"learnerName":"Student C","learnerGender":"female","learnerEmergencyContact":"7123123123"},{"learnerLessons":{"attended":[],"booked":[],"cancelled":[]},"learnerAge":8,"learnerID":"SWL4","learnerCurrentGrade":0,"learnerName":"Student D","learnerGender":"male","learnerEmergencyContact":"7121212127"}]

@@ -1,9 +1,7 @@
 package com.example.hjssapplication;
 
 import java.util.Scanner;
-import java.util.UUID;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class MainMenu extends Menu {
@@ -12,6 +10,7 @@ public class MainMenu extends Menu {
     Timetable tt = new Timetable();
     Learner learner = new Learner();
     Lesson lesson = new Lesson();
+    Report report = new Report();
     YesNoMenu ynm = new YesNoMenu();
 
     public void displayMainMenu()
@@ -28,7 +27,7 @@ public class MainMenu extends Menu {
             case 1: functionBookSwimmingLesson(); break;
             case 2: functionChangeCancelSwimmingLesson(); break;
             case 3: functionAttendSwimmingLesson(); break;
-            case 4: System.out.println("Generate Monthly Reports"); break;
+            case 4: functionGenerateMonthlyReports(); break;
             case 5: functionRegisterLearner(); break;
             case 6: System.out.println("Exit from System"); System.exit(0); break;
             default: System.out.println("ERROR: Please select correct option!");
@@ -189,6 +188,36 @@ public class MainMenu extends Menu {
 
         displayTryAgainMenu("\nDo you want to mark another lesson attended?", 3);
 
+    }
+
+    // Mani Menu Function 4: Generate Monthly Reports
+    public void functionGenerateMonthlyReports()
+    {
+        // Function Title
+        System.out.println("\n||===== Generate Monthly Reports =====||\n");
+
+        System.out.println("Select from Below\n");
+        String[] arrayMonthlyReports = {"Monthly Report of Learners", "Monthly Report of Coaches"};
+        int optionMonthlyReports = displayMenu(arrayMonthlyReports, "\n");
+
+        report.setReportDateDetails();
+
+        if(optionMonthlyReports == 1) functionGenerateMonthlyLearnersReport();
+        else if(optionMonthlyReports == 2) functionGenerateMonthlyCoachesReport();
+    }
+
+    // Sub Menu Function 4-1: Generate Monthly Report of Learners
+    public void functionGenerateMonthlyLearnersReport()
+    {
+        report.methodDisplayReportHeader("Monthly Report of Learners");
+        report.methodDisplayReportOfLearners();
+    }
+
+    // Sub Menu Function 4-2: Generate Monthly Report of Coaches
+    public void functionGenerateMonthlyCoachesReport()
+    {
+        report.methodDisplayReportHeader("Monthly Report of Coaches");
+        report.methodDisplayReportOfCoaches();
     }
 
     // Main Menu Function 5: Register a Learner

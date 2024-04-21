@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -30,4 +31,23 @@ import org.json.simple.parser.ParseException;
 //
 //}
 
+public class Practice {
+    ReusableMethods rm = new ReusableMethods();
+    Menu m = new Menu();
+    public void displayMenuTimetableTypeCoach()
+    {
 
+        System.out.println("\nSelect a Coach:");
+        JSONArray jsonArray = rm.readFromJSONFile("src\\data\\", "CoachesData.json");
+        ArrayList<String> coachList = new ArrayList<>();
+        for(int i=0; i<jsonArray.size(); i++)
+        {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            coachList.add(jsonObject.get("coachName").toString());
+        }
+        int optionTimetableCoach = m.displayMenu(coachList.toArray(String[]::new), "\t\t");
+
+
+        System.out.print(coachList.get(optionTimetableCoach-1));
+    }
+}
