@@ -8,23 +8,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Timetable {
-
     Menu m = new Menu();
     ReusableMethods rm = new ReusableMethods();
     private JSONArray timetable = new JSONArray();
-
     LocalDate currentDate = LocalDate.now();
     DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public JSONArray getTimetable() {
         return timetable;
     }
-
     public void setTimetable(JSONArray timetable) {
         this.timetable = timetable;
     }
-
-//    public void timet
 
     // Method: Display and Ask user for the Type of Timetable
     public int displayMenuTimetableType()
@@ -56,16 +51,10 @@ public class Timetable {
     // Display sub-options of selected Timetable Type: DAY
     public void displayMenuTimetableTypeDay()
     {
-        String timetableDay = "";
         System.out.println("Select a Day:");
         String[] arrayTimetableDays = {"Monday", "Wednesday", "Friday", "Saturday"};
         int optionTimetableDay = m.displayMenu(arrayTimetableDays, "\t\t");
-        for(int i=0; i<arrayTimetableDays.length; i++)
-        {
-            if(optionTimetableDay == (i+1)) timetableDay = arrayTimetableDays[i];
-        }
-
-        setTimetable(generateTimetable("lessonDay", timetableDay));
+        setTimetable(generateTimetable("lessonDay", arrayTimetableDays[optionTimetableDay-1]));
     }
 
     // Display sub-options of selected Timetable Type: GRADE
@@ -89,14 +78,7 @@ public class Timetable {
             coachList.add(jsonObject.get("coachName").toString());
         }
         int optionTimetableCoach = m.displayMenu(coachList.toArray(String[]::new), "\t\t");
-
-        String timetableCoach = "";
-        for(int i=0; i<coachList.size(); i++)
-        {
-            if(optionTimetableCoach == (i+1)) timetableCoach = coachList.get(i);
-        }
-
-        setTimetable(generateTimetable("coachName", timetableCoach));
+        setTimetable(generateTimetable("coachName", coachList.get(optionTimetableCoach-1)));
     }
 
     public JSONArray generateTimetable(String key, String value)
