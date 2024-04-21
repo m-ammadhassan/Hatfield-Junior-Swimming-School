@@ -155,16 +155,15 @@ public class Report {
         System.out.println("\nNo. of Reviews = " + reviewsOfSelectedMonth.size() + "\t\t Average Rating = " + reviewAverageRating);
     }
 
-    public JSONArray generateDataOfSelectedMonth(JSONArray lessonsArray)
+    public JSONArray generateDataOfSelectedMonth(JSONArray dataArray)
     {
-        JSONArray lessonsOfSelectedMonth = new JSONArray();
-        for(int i=0; i<lessonsArray.size(); i++)
+        JSONArray dataOfSelectedMonth = new JSONArray();
+        for(int i=0; i<dataArray.size(); i++)
         {
-            JSONObject lesson = (JSONObject) lessonsArray.get(i);
-            if(lesson.get("lessonDate").toString().startsWith(getReportDate())) lessonsOfSelectedMonth.add(lesson);
+            JSONObject data = (JSONObject) dataArray.get(i);
+            if(data.get("lessonDate").toString().startsWith(getReportDate())) dataOfSelectedMonth.add(data);
         }
-        return lessonsOfSelectedMonth;
+        return dataOfSelectedMonth;
     }
-
 
 }
