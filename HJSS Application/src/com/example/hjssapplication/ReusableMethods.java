@@ -2,10 +2,7 @@ package com.example.hjssapplication;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
@@ -117,35 +114,39 @@ public class ReusableMethods {
         return null;
     }
 
+    public Boolean validateBookLesson(Lesson lesson, Learner learner, JSONObject selectedLearner)
+    {
+        if(!validateGradeLevel(lesson, learner)) return false;
+
+        if(!validatePreviousBooking(lesson, selectedLearner)) return false;
+
+        if(!validateLessonAvailableSlots(lesson)) return false;
+
+        return true;
+    }
+
     public Boolean validateGradeLevel(Lesson lesson, Learner learner)
     {
-        int selectedLessonGrade = lesson.getLessonGrade();
-        int learnerCurrentGrade = learner.getLearnerCurrentGradeLevel();
-
-        if(learnerCurrentGrade == 0 && selectedLessonGrade == 1) return true;
-        else if(learnerCurrentGrade != 0)
+        if(learner.getLearnerCurrentGradeLevel() == 0 && lesson.getLessonGrade() == 1) return true;
+        else if(learner.getLearnerCurrentGradeLevel() != 0)
         {
-            if(selectedLessonGrade == learnerCurrentGrade) return true;
-            else if(selectedLessonGrade == (learnerCurrentGrade + 1)) return true;
-            else System.out.println("ERROR: You can either select either Grade: " + learnerCurrentGrade + " or Grade: " + (learnerCurrentGrade + 1) + " lesson!");
+            if(lesson.getLessonGrade() == learner.getLearnerCurrentGradeLevel()) return true;
+            else if(lesson.getLessonGrade() == (learner.getLearnerCurrentGradeLevel() + 1)) return true;
+            else System.out.println("ERROR: You can either select either Grade: " + learner.getLearnerCurrentGradeLevel() + " or Grade: " + (learner.getLearnerCurrentGradeLevel() + 1) + " lesson!");
         }
         else System.out.println("ERROR: You can select only Grade: " + 1 + " lesson!");
         return false;
     }
 
-    public Boolean validatePreviousBooking(Lesson lesson, JSONObject learnerDetails)
+    public Boolean validatePreviousBooking(Lesson lesson, JSONObject selectedLearner)
     {
-        String selectedLessonDate = lesson.getLessonDate();
-        String selectedLessonStartTime = lesson.getLessonStartTime();
-        String selectedLessonEndTime = lesson.getLessonEndTime();
-
-        JSONObject learnerLessons = (JSONObject) learnerDetails.get("learnerLessons");
+        JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
         JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
 
         for (int i=0; i < learnerBookedLessons.size(); i++)
         {
             JSONObject jsonObject = (JSONObject) learnerBookedLessons.get(i);
-            if(jsonObject.get("lessonDate").equals(selectedLessonDate) && jsonObject.get("lessonStartTime").equals(selectedLessonStartTime) && jsonObject.get("lessonEndTime").equals(selectedLessonEndTime))
+            if(jsonObject.get("lessonDate").equals(lesson.getLessonDate()) && jsonObject.get("lessonStartTime").equals(lesson.getLessonStartTime()))
             {
                 System.out.println("ERROR: You cannot book the same lesson twice!");
                 return false;
@@ -156,8 +157,7 @@ public class ReusableMethods {
 
     public Boolean validateLessonAvailableSlots(Lesson lesson)
     {
-        int lessonAvailableSlots = lesson.getLessonSlots();
-        if(lessonAvailableSlots > 0) return true;
+        if(lesson.getLessonSlots() > 0) return true;
         else System.out.println("ERROR: Sorry all lesson slots are full!");
         return false;
     }
