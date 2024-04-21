@@ -16,7 +16,6 @@ public class Lesson {
     private int lessonSlots;
 
     Menu m = new Menu();
-    Timetable tt = new Timetable();
     ReusableMethods rm = new ReusableMethods();
 
     Lesson()
@@ -252,71 +251,27 @@ public class Lesson {
         return randomUUID.toString().substring(0, 8);
     }
 
-    public void getBookedLessonDetails(Learner learner, JSONObject lessonBooked)
+    public void methodDisplayLessonDetails(Learner learner, JSONObject lesson, String lessonType)
     {
-        System.out.println(
+        System.out.println("\n=====================================================================================" +
+                "\n\t\t\t\t\t\t\t" + lessonType + " Lesson Details" +
                 "\n=====================================================================================" +
-                "\n\t\t\t\t\t\t\tBooked Lesson Details" +
-                "\n=====================================================================================" +
-                "\nLearner Name: " + learner.getLearnerName() +
-                "\t\t Booking ID: " + lessonBooked.get("bookingID") +
-                "\t\t Lesson Date: " + getLessonDate() +
-                "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
-                "\t\t Lesson Grade: " + getLessonGrade() +
-                "\t\t Coach Name: " + getLessonCoach() +
-                "\nLesson Start Time: " + getLessonStartTime() +
-                "\t\t Lesson End Time: " + getLessonEndTime() +
-                "\n=====================================================================================");
-    }
-
-    public void getAttendedLessonDetails(Learner learner, JSONObject lessonAttended)
-    {
-        System.out.println(
-                "\n=====================================================================================" +
-                        "\n\t\t\t\t\t\t\tAttended Lesson Details" +
-                        "\n=====================================================================================" +
-                        "\nLearner Name: " + learner.getLearnerName() +
-                        "\t\t Booking ID: " + lessonAttended.get("bookingID") +
-                        "\t\t Lesson Date: " + getLessonDate() +
-                        "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
-                        "\t\t Lesson Grade: " + getLessonGrade() +
-                        "\t\t Coach Name: " + getLessonCoach() +
-                        "\nLesson Rating: " + lessonAttended.get("lessonReviewRating") +
-                        "\nLesson Review: " + lessonAttended.get("lessonReviewMessage") +
-                        "\n=====================================================================================");
-    }
-
-    public void getCancelledLessonDetails(Learner learner, JSONObject lessonCancelled)
-    {
-        System.out.println(
-                "\n=====================================================================================" +
-                        "\n\t\t\t\t\t\t\tCancelled Lesson Details" +
-                        "\n=====================================================================================" +
-                        "\nLearner Name: " + learner.getLearnerName() +
-                        "\t\t Booking ID: " + lessonCancelled.get("bookingID") +
-                        "\t\t Lesson Date: " + getLessonDate() +
-                        "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
-                        "\t\t Lesson Grade: " + getLessonGrade() +
-                        "\t\t Coach Name: " + getLessonCoach() +
-                        "\n=====================================================================================");
-    }
-
-    public void getChangedLessonDetails(Learner learner, JSONObject lessonChanged)
-    {
+                "\nBooking ID: " + lesson.get("bookingID") +
+                "\t\t Learner Name: " + learner.getLearnerName() +
+                "\t\t Learner Grade: " + learner.getLearnerCurrentGradeLevel() +
+                "\nLesson Date: " + getLessonDate() +
+                "\t\t Lesson Time: " + getLessonStartTime() + "-" + getLessonEndTime() +
+                "\t\t Lesson Grade : " + getLessonGrade());
+        if(lessonType.equalsIgnoreCase("booked") || lessonType.equalsIgnoreCase("cancelled") || lessonType.equalsIgnoreCase("changed"))
         {
-            System.out.println(
-                    "\n=====================================================================================" +
-                            "\n\t\t\t\t\t\t\tChanged Lesson Details" +
-                            "\n=====================================================================================" +
-                            "\nLearner Name: " + learner.getLearnerName() +
-                            "\t\t Booking ID: " + lessonChanged.get("bookingID") +
-                            "\t\t Lesson Date: " + getLessonDate() +
-                            "\nLearner Grade: " + learner.getLearnerCurrentGradeLevel() +
-                            "\t\t Lesson Grade: " + getLessonGrade() +
-                            "\t\t Coach Name: " + getLessonCoach() +
-                            "\nLesson Start Time: " + getLessonStartTime() +
-                            "\t\t Lesson End Time: " + getLessonEndTime() +
-                            "\n=====================================================================================");
+            System.out.println("\n=====================================================================================");
+        }
+        else if(lessonType.equalsIgnoreCase("attended"))
+        {
+            System.out.println("\nCoach Name: " + getLessonCoach() +
+                    "\t\tLesson Rating: " + lesson.get("lessonReviewRating") +
+                    "\nLesson Review: " + lesson.get("lessonReviewMessage") +
+                    "\n=====================================================================================");
         }
     }
 
