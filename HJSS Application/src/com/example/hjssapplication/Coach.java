@@ -43,29 +43,27 @@ public class Coach {
         this.coachGrade = coachGrade;
     }
 
-    public void methodAddCoachReview(Review review, Learner learner, JSONObject selectedLesson)
+    public void methodAddCoachReview(Learner learner, JSONObject selectedLessonReview)
     {
         JSONArray arrayOfCoaches = rm.readFromJSONFile("src\\data\\", "PracticeCoaches.json");
         int indexOfCoach = 0;
 
         for(int i=0; i<arrayOfCoaches.size(); i++)
         {
-            if(((JSONObject) arrayOfCoaches.get(i)).get("coachID").equals(selectedLesson.get("coachID"))) indexOfCoach = i;
+            if(((JSONObject) arrayOfCoaches.get(i)).get("coachID").equals(selectedLessonReview.get("coachID"))) indexOfCoach = i;
         }
 
         JSONObject selectedCoach = (JSONObject) arrayOfCoaches.get(indexOfCoach);
         JSONArray coachReviews = (JSONArray) selectedCoach.get("coachReviews");
 
-        JSONObject newReview = new JSONObject();
-        newReview.put("bookingID", selectedLesson.get("bookingID"));
-        newReview.put("lessonDate", selectedLesson.get("lessonDate"));
-        newReview.put("lessonGrade", selectedLesson.get("lessonGrade"));
-        newReview.put("learnerID", learner.getLearnerID());
-        newReview.put("learnerName", learner.getLearnerName());
-        newReview.put("lessonReviewRating", review.getReviewRating());
-        newReview.put("lessonReviewMessage", review.getReviewMessage());
+        selectedLessonReview.remove("coachName");
+        selectedLessonReview.remove("coachID");
+        selectedLessonReview.remove("lessonDay");
 
-        coachReviews.add(newReview);
+        selectedLessonReview.put("learnerID", learner.getLearnerID());
+        selectedLessonReview.put("learnerName", learner.getLearnerName());
+
+        coachReviews.add(selectedLessonReview);
 
         if(!rm.updateInJSONFile("src\\data\\", "PracticeCoaches.json", indexOfCoach, selectedCoach)) {
             System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
