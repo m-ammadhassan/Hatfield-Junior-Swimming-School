@@ -122,9 +122,13 @@ public class Learner {
         while (learnerContact==null);
         setLearnerEmergencyContactNumber(learnerContact);
 
-        // Setting New Learner Grade Automatic
+        // Setting New Learner Grade Automatically
         learnerGrade = 0;
         setLearnerCurrentGradeLevel(learnerGrade);
+
+        // Setting New Learner ID Automatically
+        String learnerID = generateLearnerID();
+        setLearnerID(learnerID);
     }
 
     public JSONObject methodAddNewLearner()
