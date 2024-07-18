@@ -1,0 +1,131 @@
+commit 90b997dbb692e8ed4002505865d53864601ccc1e
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:48:06 2024 +0100
+
+    Tested Practice Data
+
+commit 523bdfe33a934a679bb3f7ca3e2c2293b15f812e
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:47:50 2024 +0100
+
+    Modified Review Class
+
+commit 4294db27da28d8b76c8c7d8eb09acbac52f0ba3e
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:47:35 2024 +0100
+
+    Modified Reusable Methods Class
+
+commit 1c1426d5a9e7af01e1119472f6455fae908c9ab7
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:47:13 2024 +0100
+
+    Modified Report Class
+
+commit d995b5cce41e68454908889c65eb414acd820901
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:46:49 2024 +0100
+
+    Modified Main Menu Class
+
+commit 1efdf99de5f5abb71602e854d4d92686703bb612
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:46:34 2024 +0100
+
+    Modified Lesson Class
+
+commit b19055df4d4e3d4a3aa7f750e0c170bb9d25ded3
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:46:12 2024 +0100
+
+    Modified Learner Class
+
+commit c4a61eadd934452d84c51b492b545c0fc77e7ca2
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:45:53 2024 +0100
+
+    Modified Coach Class
+
+commit 73e2f2d4d1db6fa8dbef76903ed7e058e9081066
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 21:45:38 2024 +0100
+
+    Deleted Extra Files
+
+commit cc7ed161c64b0389d6e309b5557221446c7370c7
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 15:05:34 2024 +0100
+
+    Modified Timetable Class Code
+
+commit 5facab4313f40f8fa9c0b65e49d7391cf2ea3291
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sun Apr 21 15:05:09 2024 +0100
+
+    Completed Monthly Reports Functionality
+
+commit 99a2170289529ba5a492be82b392a91bee6cbde5
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sat Apr 20 16:41:00 2024 +0100
+
+    Completed Change a Swimming Lesson Functionality
+
+commit 5563787dab652f7cdcb7c5173164e8d1f1b558ee
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Sat Apr 20 01:22:10 2024 +0100
+
+    Completed Cancel a Swimming Lesson Functionality
+
+commit cf4731b8615590c852f07ab6e15edc257b0af94f
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Fri Apr 19 19:50:13 2024 +0100
+
+    Modified Register Learner Function
+
+commit 44c2738db6bc0d78301decb7cca6c41ffbf5a629
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Fri Apr 19 19:38:20 2024 +0100
+
+    Completed Attend a Swimming Lesson Function
+
+commit 87a9fe98e0fe37e1d8bb0ff7cd00783af21c73b3
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Apr 17 15:55:37 2024 +0100
+
+    Practice Files and Code
+
+commit 3c62ff2ff3bc09edc4302e10be899a8486877544
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Apr 17 15:55:14 2024 +0100
+
+    Coaches JSON File Created
+
+commit 24272947461cc5106758517c37eefcdf305b9828
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Apr 17 15:54:44 2024 +0100
+
+    IDE updated
+
+commit ac8da179855630b2381dd94113918884a0b158a9
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Apr 17 15:54:18 2024 +0100
+
+    Modified and Completed Register Leaner and Book Lesson Functions
+
+commit 726f6ac53c70a59808dcb860875cd0efeaebe1cf
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Apr 3 07:03:03 2024 +0100
+
+    Method Register a Learner 80% Completed
+
+commit 760ef0460823cd054b2fbbeba8ce4b9cdb019a6f
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Tue Apr 2 06:09:35 2024 +0100
+
+    Main Menu Interface Completed
+
+commit acf0da31a888b68b68877ca99a4b0e23cf75c5f5
+Author: Muhammad Ammad Hassan <m.ammadhassan@yahoo.com>
+Date:   Wed Feb 28 10:03:39 2024 +0000
+
+    Initial commit
