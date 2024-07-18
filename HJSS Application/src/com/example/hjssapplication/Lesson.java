@@ -18,19 +18,7 @@ public class Lesson {
     Menu m = new Menu();
     ReusableMethods rm = new ReusableMethods();
 
-    Lesson()
-    {}
-
-    Lesson(String lessonDate, String lessonDay, String lessonStartTime, String lessonEndTime, int lessonGrade, String lessonCoach, int lessonSlots)
-    {
-        this.setLessonDate(lessonDate);
-        this.setLessonDay(lessonDay);
-        this.setLessonStartTime(lessonStartTime);
-        this.setLessonEndTime(lessonEndTime);
-        this.setLessonGrade(lessonGrade);
-        this.setLessonCoach(lessonCoach);
-        this.setLessonSlots(lessonSlots);
-    }
+    Lesson() {}
 
     public String getLessonDate() {
         return lessonDate;
@@ -90,18 +78,21 @@ public class Lesson {
 
     public void methodUpdateSelectedLessonSlots(JSONObject selectedLesson, String lessonType)
     {
-        JSONArray arrayOfLessons = rm.readFromJSONFile("src\\data\\", "PracticeLessons.json");
+        JSONArray arrayOfLessons = rm.readFromJSONFile("src\\data\\", "LessonsData.json");
         int indexOfLesson = 0;
 
         if(lessonType.equals("book"))
         {
             indexOfLesson = rm.getIndex(arrayOfLessons, selectedLesson);
+            selectedLesson.remove("lessonGrade");
             selectedLesson.remove("lessonSlots");
+            selectedLesson.put("lessonGrade", Integer.toString(getLessonGrade()));
             selectedLesson.put("lessonSlots", (getLessonSlots() - 1));
         }
         else if(lessonType.equals("cancel") || lessonType.equals("change"))
         {
             selectedLesson.remove("bookingID");
+            selectedLesson.remove("lessonGrade");
             int previousSlots = 0;
             for(int i=0; i<arrayOfLessons.size(); i++)
             {
@@ -112,15 +103,16 @@ public class Lesson {
                     indexOfLesson = i;
                 }
             }
+            selectedLesson.put("lessonGrade", Integer.toString(getLessonGrade()));
             selectedLesson.put("lessonSlots", previousSlots + 1);
         }
 
-        rm.updateInJSONFile("src\\data\\", "PracticeLessons.json", indexOfLesson, selectedLesson);
+        rm.updateInJSONFile("src\\data\\", "LessonsData.json", indexOfLesson, selectedLesson);
     }
 
     public JSONObject methodAddLessonInLearnerBookedLessons(JSONObject selectedLesson, JSONObject selectedLearner)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
@@ -138,14 +130,14 @@ public class Lesson {
 
         learnerBookedLessons.add(lessonBooked);
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonBooked;
+        if(rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) return lessonBooked;
         else System.out.println("ERROR: Sorry! some error occurred while booking.");
         return null;
     }
 
     public JSONObject methodAddLessonInLearnerAttendedLessons(JSONObject selectedLesson, JSONObject selectedLearner, Review review)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
@@ -161,14 +153,14 @@ public class Lesson {
         learnerAttendedLessons.add(lessonAttended);
         learnerBookedLessons.remove(indexOfLesson);
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonAttended;
+        if(rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) return lessonAttended;
         else System.out.println("ERROR: Sorry! some error occurred while marking lesson attended.");
         return null;
     }
 
     public JSONObject methodAddLessonInLearnerCancelledLessons(JSONObject selectedLesson, JSONObject selectedLearner)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
@@ -185,14 +177,14 @@ public class Lesson {
         learnerCancelledLessons.add(lessonCancelled);
         learnerBookedLessons.remove(indexOfLesson);
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return lessonCancelled;
+        if(rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) return lessonCancelled;
         else System.out.println("ERROR: Sorry! some error occurred while cancelling lesson.");
         return null;
     }
 
     public JSONObject methodUpdateLessonInLearnerBookedLessons(JSONObject previousLesson, JSONObject newLesson, JSONObject selectedLearner)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
@@ -208,16 +200,15 @@ public class Lesson {
 
         learnerBookedLessons.add(newLesson);
         learnerBookedLessons.remove(indexOfPreviousLesson);
-        System.out.println(learnerBookedLessons);
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return newLesson;
+        if(rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) return newLesson;
         else System.out.println("ERROR: Sorry! some error occurred while changing lesson.");
         return null;
     }
 
     public void methodUpdateBookedLessonsOnGradeUpgrade(JSONObject selectedLearner)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
@@ -240,7 +231,7 @@ public class Lesson {
             learnerBookedLessons.remove(arrayOfLessonsToDelete.get(i));
         }
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) {
+        if(!rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) {
             System.out.println("ERROR: Sorry! some error occurred while deleting lessons.");
         }
     }

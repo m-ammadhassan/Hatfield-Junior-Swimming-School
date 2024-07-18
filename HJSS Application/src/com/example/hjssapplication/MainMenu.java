@@ -2,6 +2,8 @@ package com.example.hjssapplication;
 
 import org.json.simple.JSONObject;
 
+import java.awt.*;
+
 public class MainMenu extends Menu {
     ReusableMethods rm = new ReusableMethods();
     Timetable tt = new Timetable();
@@ -10,11 +12,11 @@ public class MainMenu extends Menu {
     Coach coach = new Coach();
     Report report = new Report();
     Review review = new Review();
-    YesNoMenu ynm = new YesNoMenu();
 
     // Display Main Menu
     public void displayMainMenu()
     {
+        System.out.println("\n");
         String[] arrayMainMenu = {"Book a Swimming Lesson", "Change / Cancel Booking", "Attend a Swimming Lesson", "Monthly Reports", "Register a New Learner", "Exit"};
         int optionMainMenu = displayMenu(arrayMainMenu, "\n");
         actionOnMainMenuOption(optionMainMenu);
@@ -47,7 +49,7 @@ public class MainMenu extends Menu {
         if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
 
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+        if(displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else functionBookSwimmingLesson();
 
         JSONObject selectedLearner = learner.setLearnerDetailsFromJSON();
 
@@ -89,19 +91,19 @@ public class MainMenu extends Menu {
 
         JSONObject previousLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) previousLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+        if(displayYesNoMenu()) previousLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateChangeCancelLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 6);
 
         System.out.println("\n\nSelect a New Lesson: \n");
 
-        if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 1);
+        if(!tt.displayTimetable()) displayTryAgainMenu("Do you want to try again?", 6);
 
         JSONObject newLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) newLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+        if(displayYesNoMenu()) newLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
-        if(!rm.validateBookLesson(lesson, learner, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 1);
+        if(!rm.validateBookLesson(lesson, learner, selectedLearner)) displayTryAgainMenu("Do you want to try again?", 6);
 
         JSONObject lessonChanged = lesson.methodUpdateLessonInLearnerBookedLessons(previousLesson, newLesson, selectedLearner);
 
@@ -109,9 +111,9 @@ public class MainMenu extends Menu {
             System.out.println("\nDear " + learner.getLearnerName() + ", you have successfully changed a lesson. Details are below:");
             lesson.methodDisplayLessonDetails(learner, lessonChanged, "Changed");
         }
-        else displayTryAgainMenu("\nDo you want to try again?", 1);
+        else displayTryAgainMenu("\nDo you want to try again?", 6);
 
-        displayTryAgainMenu("\nDo you want to change another lesson?", 1);
+        displaySystemMenu("\nDo you want to change another lesson?", 2);
     }
 
     // Sub Menu Function 2-2: Cancel a Swimming Lesson
@@ -123,7 +125,7 @@ public class MainMenu extends Menu {
 
         JSONObject selectedLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+        if(displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateChangeCancelLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 7);
 
@@ -136,7 +138,7 @@ public class MainMenu extends Menu {
         }
         else displayTryAgainMenu("\nDo you want to try again?", 7);
 
-        displayTryAgainMenu("\nDo you want to cancel another lesson?", 7);
+        displaySystemMenu("\nDo you want to cancel another lesson?", 2);
     }
 
     // Main Menu Function 3: Attend a Swimming Lesson
@@ -151,7 +153,7 @@ public class MainMenu extends Menu {
 
         JSONObject selectedLesson = new JSONObject();
         System.out.println("Do you want to select a Lesson?");
-        if(ynm.displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
+        if(displayYesNoMenu()) selectedLesson = lesson.setLessonDetailsFromJSON(tt); else displayMainMenu();
 
         if(!rm.validateAttendLessonTime(lesson)) displayTryAgainMenu("Do you want to try again?", 3);
 
@@ -169,7 +171,7 @@ public class MainMenu extends Menu {
 
         coach.methodAddCoachReview(learner, lessonAttended);
 
-        displayTryAgainMenu("\nDo you want to mark another lesson attended?", 3);
+        displaySystemMenu("\nDo you want to mark another lesson attended?", 3);
     }
 
     // Mani Menu Function 4: Generate Monthly Reports
@@ -214,7 +216,7 @@ public class MainMenu extends Menu {
             learner.setNewLearnerDetails();
             System.out.println("\nAre you sure all the details are correct?");
         }
-        while (!ynm.displayYesNoMenu());
+        while (!displayYesNoMenu());
 
         JSONObject registeredLearner = learner.methodAddNewLearner();
 
@@ -231,7 +233,7 @@ public class MainMenu extends Menu {
     public void displayTryAgainMenu(String message, int optionMainMenu)
     {
         System.out.println(message);
-        if(ynm.displayYesNoMenu())
+        if(displayYesNoMenu())
         {
             if(optionMainMenu >=1 && optionMainMenu <=5) actionOnMainMenuOption(optionMainMenu);
             else if(optionMainMenu == 6) functionChangeSwimmingLesson();
@@ -248,6 +250,15 @@ public class MainMenu extends Menu {
         if(optionSystemMenu == 1) actionOnMainMenuOption(optionMainMenu);
         else if(optionSystemMenu == 2) displayMainMenu();
         else actionOnMainMenuOption(6);
+    }
+
+    public Boolean displayYesNoMenu()
+    {
+        String[] arrayYesNoMenu = {"Yes", "No"};
+        int optionYesNoMenu = displayMenu(arrayYesNoMenu, "\t\t");
+
+        if(optionYesNoMenu == 1) return true;
+        else return false;
     }
 
 }

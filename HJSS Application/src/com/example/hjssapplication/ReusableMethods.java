@@ -3,8 +3,6 @@ package com.example.hjssapplication;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,22 +23,22 @@ public class ReusableMethods {
     //Method: For Clearing The Screen
     public void clearConsole()
     {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     //Method: Validating Name
-    public String validateName(String name)
+    public boolean validateName(String name)
     {
-        String regexName = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
-        Pattern pattern = Pattern.compile(regexName);
-        Matcher matcher = pattern.matcher(name);
+        String regexOfName = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
-        if(matcher.matches())
+        if(name.matches(regexOfName))
         {
-            if (name.length()>=2 && name.length()<=60) return name;
+            if (name.length()>=2 && name.length()<=60) return true;
             else System.out.println("Error: Name must contain minimum 2 alphabets!");
         }
         else System.out.println("ERROR: Please enter valid name!");
-        return null;
+        return false;
     }
 
     //Method: Validating Number
@@ -53,49 +51,41 @@ public class ReusableMethods {
         }
     }
 
-    //Method: Validating Gender
-    public String validateGender(int genderMenuOption)
-    {
-        if(genderMenuOption == 1) return "male";
-        else if(genderMenuOption == 2) return "female";
-        else return "other";
-    }
-
     //Method: Validating Age
-    public String validateAge(String age)
+    public boolean validateAge(String age)
     {
         int minAge = 4;
         int maxAge = 11;
         if(validateIsNumber(age))
         {
-            if(Integer.parseInt(age) >= minAge && Integer.parseInt(age) <= maxAge) return age;
+            if(Integer.parseInt(age) >= minAge && Integer.parseInt(age) <= maxAge) return true;
             else System.out.println("ERROR: Age must be between " + minAge + " and " + maxAge);
         }
         else System.out.println("ERROR: Age must be a number!");
-        return null;
+        return false;
     }
 
     //Method: Validating Contact Number
-    public String validateContact(String contact)
+    public boolean validateContact(String contact)
     {
         if(contact.length() == 10)
         {
             if(contact.startsWith("7"))
             {
-                if(validateIsNumber(contact.substring(0,2)) && validateIsNumber(contact.substring(2))) return contact;
+                if(validateIsNumber(contact.substring(0,2)) && validateIsNumber(contact.substring(2))) return true;
                 else System.out.println("ERROR: Contact number is not correct!");
             }
             else System.out.println("ERROR: Contact number must start with 7!");
         }
         else System.out.println("ERROR: Contact number must be 10 digits long and cannot contain space!");
 
-        return null;
+        return false;
     }
 
     // Method: Validating Learner ID
     public String validateLearnerID(String id)
     {
-        JSONArray jsonArray = readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray jsonArray = readFromJSONFile("src\\data\\", "LearnersData.json");
         String learnerID;
         String jsonLearnerID = "";
         if(validateIsNumber(id))
@@ -114,7 +104,7 @@ public class ReusableMethods {
         return null;
     }
 
-    public Boolean validateBookLesson(Lesson lesson, Learner learner, JSONObject selectedLearner)
+    public boolean validateBookLesson(Lesson lesson, Learner learner, JSONObject selectedLearner)
     {
         if(!validateGradeLevel(lesson, learner)) return false;
 
@@ -125,7 +115,7 @@ public class ReusableMethods {
         return true;
     }
 
-    public Boolean validateGradeLevel(Lesson lesson, Learner learner)
+    public boolean validateGradeLevel(Lesson lesson, Learner learner)
     {
         if(learner.getLearnerCurrentGradeLevel() == 0 && lesson.getLessonGrade() == 1) return true;
         else if(learner.getLearnerCurrentGradeLevel() != 0)
@@ -138,7 +128,7 @@ public class ReusableMethods {
         return false;
     }
 
-    public Boolean validatePreviousBooking(Lesson lesson, JSONObject selectedLearner)
+    public boolean validatePreviousBooking(Lesson lesson, JSONObject selectedLearner)
     {
         JSONObject learnerLessons = (JSONObject) selectedLearner.get("learnerLessons");
         JSONArray learnerBookedLessons = (JSONArray) learnerLessons.get("booked");
@@ -155,14 +145,14 @@ public class ReusableMethods {
         return true;
     }
 
-    public Boolean validateLessonAvailableSlots(Lesson lesson)
+    public boolean validateLessonAvailableSlots(Lesson lesson)
     {
-        if(lesson.getLessonSlots() > 0) return true;
+        if(lesson.getLessonSlots() > 0 && lesson.getLessonSlots() < 5) return true;
         else System.out.println("ERROR: Sorry all lesson slots are full!");
         return false;
     }
 
-    public Boolean validateAttendLessonTime(Lesson lesson)
+    public boolean validateAttendLessonTime(Lesson lesson)
     {
         LocalDate lessonDate = LocalDate.parse(lesson.getLessonDate(), formatDate);
         LocalTime lessonEndTime = LocalTime.parse(lesson.getLessonEndTime(), formatTime);
@@ -175,7 +165,7 @@ public class ReusableMethods {
         return false;
     }
 
-    public Boolean validateChangeCancelLessonTime(Lesson lesson)
+    public boolean validateChangeCancelLessonTime(Lesson lesson)
     {
         LocalDate lessonDate = LocalDate.parse(lesson.getLessonDate(), formatDate);
         LocalTime lessonStartTime = LocalTime.parse(lesson.getLessonStartTime(), formatTime);
@@ -210,7 +200,7 @@ public class ReusableMethods {
     }
 
     //Method: Write To JSON File
-    public Boolean writeInJSONFile(String filePath, String fileName, JSONObject newObject)
+    public boolean writeInJSONFile(String filePath, String fileName, JSONObject newObject)
     {
         JSONArray jsonArray = readFromJSONFile(filePath, fileName);
         jsonArray.addLast(newObject);
@@ -232,7 +222,7 @@ public class ReusableMethods {
         }
     }
 
-    public Boolean updateInJSONFile(String filePath, String fileName, int previousIndex, JSONObject newObject)
+    public boolean updateInJSONFile(String filePath, String fileName, int previousIndex, JSONObject newObject)
     {
         JSONArray jsonArray = readFromJSONFile(filePath, fileName);
         jsonArray.remove(previousIndex);
@@ -253,20 +243,6 @@ public class ReusableMethods {
             System.out.println("ERROR: " + e);
             return false;
         }
-    }
-
-    public void deleteInJSONFile(String filePath, String fileName)
-    {}
-
-    public int getPreviousIndex(String filePath, String fileName, JSONObject previousObject)
-    {
-        JSONArray jsonArray = readFromJSONFile(filePath, fileName);
-        int previousIndex = 0;
-        for(int i=0; i < jsonArray.size(); i++)
-        {
-            if(jsonArray.get(i).equals(previousObject)) previousIndex = i;
-        }
-        return previousIndex;
     }
 
     public int getIndex(JSONArray array, JSONObject object)

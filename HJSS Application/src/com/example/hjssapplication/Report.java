@@ -34,7 +34,7 @@ public class Report {
     {
         System.out.println("\nSelect a Month: ");
         String[] arrayOfMonths = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        int optionSelectedMonth = m.displayMenu(arrayOfMonths, "\t\t");
+        int optionSelectedMonth = m.displayMenu(arrayOfMonths, "\t");
 
         setReportMonthName(arrayOfMonths[optionSelectedMonth-1]);
 
@@ -59,7 +59,7 @@ public class Report {
 
     public void methodDisplayReportOfLearners()
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         for(int i=0; i<arrayOfLearners.size(); i++)
         {
             JSONObject learnerData = (JSONObject) arrayOfLearners.get(i);
@@ -89,7 +89,7 @@ public class Report {
 
     public void methodDisplayReportOfCoaches()
     {
-        JSONArray arrayOfCoaches = rm.readFromJSONFile("src\\data\\", "PracticeCoaches.json");
+        JSONArray arrayOfCoaches = rm.readFromJSONFile("src\\data\\", "CoachesData.json");
         for(int i=0; i<arrayOfCoaches.size(); i++)
         {
             JSONObject coachData = (JSONObject) arrayOfCoaches.get(i);

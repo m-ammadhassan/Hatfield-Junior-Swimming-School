@@ -8,16 +8,9 @@ public class Coach {
     ReusableMethods rm = new ReusableMethods();
     private String coachID;
     private String coachName;
-    private int coachGrade;
+
 
     Coach() {}
-
-    Coach(String id, String name, int grade)
-    {
-        setCoachID(id);
-        setCoachName(name);
-        setCoachGrade(grade);
-    }
 
     public String getCoachID() {
         return coachID;
@@ -35,17 +28,10 @@ public class Coach {
         this.coachName = coachName;
     }
 
-    public int getCoachGrade() {
-        return coachGrade;
-    }
-
-    public void setCoachGrade(int coachGrade) {
-        this.coachGrade = coachGrade;
-    }
 
     public void methodAddCoachReview(Learner learner, JSONObject selectedLessonReview)
     {
-        JSONArray arrayOfCoaches = rm.readFromJSONFile("src\\data\\", "PracticeCoaches.json");
+        JSONArray arrayOfCoaches = rm.readFromJSONFile("src\\data\\", "CoachesData.json");
         int indexOfCoach = 0;
 
         for(int i=0; i<arrayOfCoaches.size(); i++)
@@ -65,7 +51,7 @@ public class Coach {
 
         coachReviews.add(selectedLessonReview);
 
-        if(!rm.updateInJSONFile("src\\data\\", "PracticeCoaches.json", indexOfCoach, selectedCoach)) {
+        if(!rm.updateInJSONFile("src\\data\\", "CoachesData.json", indexOfCoach, selectedCoach)) {
             System.out.println("ERROR: Sorry! some error occurred while making lesson attended.");
         }
     }

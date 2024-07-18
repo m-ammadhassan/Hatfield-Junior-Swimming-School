@@ -22,15 +22,6 @@ public class Learner {
     {
         this.setLearnerID("");
     }
-    Learner(String id, String name, String gender, int age, String contact, int level)
-    {
-        this.setLearnerID(id);
-        this.setLearnerName(name);
-        this.setLearnerGender(gender);
-        this.setLearnerAge(age);
-        this.setLearnerEmergencyContactNumber(contact);
-        this.setLearnerCurrentGradeLevel(level);
-    }
 
     public String getLearnerID() {
         return learnerID;
@@ -78,15 +69,6 @@ public class Learner {
         this.learnerCurrentGradeLevel = level;
     }
 
-    public String generateLearnerID()
-    {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
-        JSONObject lastLearner = (JSONObject) arrayOfLearners.getLast();
-        String lastLearnerID = lastLearner.get("learnerID").toString();
-        int lastLearnerIDNum = Integer.parseInt(lastLearnerID.substring(3));
-        return "SWL" + (lastLearnerIDNum + 1);
-    }
-
     public void setNewLearnerDetails()
     {
         // Declaring Local Variables
@@ -96,30 +78,32 @@ public class Learner {
         // --> Name
         do{
             System.out.print("Enter Name: ");
-            learnerName = rm.validateName(userInput.nextLine());
+            learnerName = userInput.nextLine();
         }
-        while (learnerName==null);
+        while (!rm.validateName(learnerName));
         setLearnerName(learnerName);
 
         // --> Gender
         System.out.println("\nSelect Gender: ");
-        learnerGender = rm.validateGender(m.displayMenu(new String[] {"Male", "Female", "Other"}, "\t\t"));
+        String[] arrayOfGenders = {"Male", "Female", "Other"};
+        int optionOfGender = m.displayMenu(arrayOfGenders, "\t\t");
+        learnerGender = arrayOfGenders[optionOfGender-1];
         setLearnerGender(learnerGender);
 
         // --> Age
         do{
             System.out.print("\nEnter Age: ");
-            learnerAge = rm.validateAge(userInput.nextLine().replace(" ", ""));
+            learnerAge = userInput.nextLine().replace(" ", "");
         }
-        while (learnerAge==null);
+        while (!rm.validateAge(learnerAge));
         setLearnerAge(Integer.parseInt(learnerAge));
 
         // --> Emergency Contact Number
         do {
             System.out.print("\nEnter Emergency Contact Number: ");
-            learnerContact = rm.validateContact(userInput.nextLine().replace(" ", ""));
+            learnerContact = userInput.nextLine().replace(" ", "");
         }
-        while (learnerContact==null);
+        while (!rm.validateContact(learnerContact));
         setLearnerEmergencyContactNumber(learnerContact);
 
         // Setting New Learner Grade Automatically
@@ -129,6 +113,15 @@ public class Learner {
         // Setting New Learner ID Automatically
         String learnerID = generateLearnerID();
         setLearnerID(learnerID);
+    }
+
+    public String generateLearnerID()
+    {
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
+        JSONObject lastLearner = (JSONObject) arrayOfLearners.getLast();
+        String lastLearnerID = lastLearner.get("learnerID").toString();
+        int lastLearnerIDNum = Integer.parseInt(lastLearnerID.substring(3));
+        return "SWL" + (lastLearnerIDNum + 1);
     }
 
     public JSONObject methodAddNewLearner()
@@ -151,7 +144,7 @@ public class Learner {
         newLearnerLessonsObject.put("attended", newLearnerAttendedLessonsArray);
         newLearnerLessonsObject.put("cancelled", newLearnerCancelledLessonsArray);
 
-        if(rm.writeInJSONFile( "src\\data\\", "PracticeLearners.json", newLearnerObject)) return newLearnerObject;
+        if(rm.writeInJSONFile( "src\\data\\", "LearnersData.json", newLearnerObject)) return newLearnerObject;
         else System.out.println("ERROR: Sorry! some error occurred while registering a new learner.");
         return null;
     }
@@ -174,7 +167,7 @@ public class Learner {
     public JSONObject setLearnerDetailsFromJSON()
     {
         String learnerID = getLearnerID();
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         JSONObject learnerDetails = new JSONObject();
 
         // Get a learner ID first time
@@ -206,7 +199,7 @@ public class Learner {
 
     public Boolean methodUpdateLearnerGradeLevel(JSONObject lessonAttended, JSONObject selectedLearner)
     {
-        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "PracticeLearners.json");
+        JSONArray arrayOfLearners = rm.readFromJSONFile("src\\data\\", "LearnersData.json");
         int indexOfLearner = rm.getIndex(arrayOfLearners, selectedLearner);
 
         if(Integer.parseInt(lessonAttended.get("lessonGrade").toString()) > getLearnerCurrentGradeLevel())
@@ -217,7 +210,7 @@ public class Learner {
         selectedLearner.remove("learnerCurrentGrade");
         selectedLearner.put("learnerCurrentGrade", getLearnerCurrentGradeLevel());
 
-        if(rm.updateInJSONFile("src\\data\\", "PracticeLearners.json", indexOfLearner, selectedLearner)) return true;
+        if(rm.updateInJSONFile("src\\data\\", "LearnersData.json", indexOfLearner, selectedLearner)) return true;
         else System.out.println("ERROR: Sorry! some error occurred while updating learner grade.");
         return false;
     }

@@ -34,17 +34,10 @@ public class Timetable {
     {
         switch(optionTimetableType)
         {
-            case 1:
-                displayMenuTimetableTypeDay();
-                break;
-            case 2:
-                displayMenuTimetableTypeGrade();
-                break;
-            case 3:
-                displayMenuTimetableTypeCoach();
-                break;
-            default:
-                System.out.println("ERROR: Please select correct option!");
+            case 1: displayMenuTimetableTypeDay(); break;
+            case 2: displayMenuTimetableTypeGrade(); break;
+            case 3: displayMenuTimetableTypeCoach(); break;
+            default: System.out.println("ERROR: Please select correct option!");
         }
     }
 
@@ -83,7 +76,7 @@ public class Timetable {
 
     public JSONArray generateTimetable(String key, String value)
     {
-        JSONArray jsonArray = rm.readFromJSONFile("src\\data\\", "PracticeLessons.json");
+        JSONArray jsonArray = rm.readFromJSONFile("src\\data\\", "LessonsData.json");
         JSONArray timetable = new JSONArray();
         // For Loop To Select All Lessons Which Are Equal To Selected Day / Grade / Coach
         for(int i=0; i<jsonArray.size(); i++)
@@ -108,7 +101,7 @@ public class Timetable {
         return null;
     }
 
-    public Boolean displayTimetable()
+    public boolean displayTimetable()
     {
         int optionTimetableType = displayMenuTimetableType();
 
